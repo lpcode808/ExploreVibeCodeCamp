@@ -2709,6 +2709,32 @@
     </div>
 </div>
 
+<!-- Reflection Modal -->
+<div id="reflection-modal">
+    <div class="reflection-backdrop"></div>
+    <div class="reflection-content">
+        <div class="reflection-header">
+            <div class="reflection-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                Project Reflections
+            </div>
+            <button class="reflection-close" aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="reflection-body">
+            <!-- Content loaded via JS -->
+        </div>
+    </div>
+</div>
+
 <script>
 // ============================================================================
 // Scroll Tracking
@@ -3308,8 +3334,6 @@ function initSlideshow() {
 // Reflection Modal
 // ============================================================================
 
-const reflectionModal = document.getElementById('reflection-modal');
-const reflectionBody = document.querySelector('.reflection-body');
 let reflectionLoaded = false;
 
 function parseMarkdown(md) {
@@ -3330,6 +3354,8 @@ function parseMarkdown(md) {
 
 async function loadReflectionContent() {
     if (reflectionLoaded) return;
+    const reflectionBody = document.querySelector('.reflection-body');
+    if (!reflectionBody) return;
     
     try {
         const response = await fetch('reflections/lessons.md');
@@ -3343,18 +3369,27 @@ async function loadReflectionContent() {
 }
 
 function openReflectionModal() {
+    const modal = document.getElementById('reflection-modal');
+    if (!modal) return;
+    
     loadReflectionContent();
-    reflectionModal.classList.add('visible');
+    modal.classList.add('visible');
     document.body.style.overflow = 'hidden';
 }
 
 function closeReflectionModal() {
-    reflectionModal.classList.remove('visible');
+    const modal = document.getElementById('reflection-modal');
+    if (!modal) return;
+    
+    modal.classList.remove('visible');
     document.body.style.overflow = '';
 }
 
 function initReflections() {
     const card = document.getElementById('reflection-card');
+    const modal = document.getElementById('reflection-modal');
+    const closeBtn = document.querySelector('.reflection-close');
+
     if (card) {
         card.addEventListener('click', (e) => {
             e.preventDefault();
@@ -3362,14 +3397,13 @@ function initReflections() {
         });
     }
     
-    const closeBtn = document.querySelector('.reflection-close');
     if (closeBtn) {
         closeBtn.addEventListener('click', closeReflectionModal);
     }
     
-    if (reflectionModal) {
-        reflectionModal.addEventListener('click', (e) => {
-            if (e.target === reflectionModal || e.target.classList.contains('reflection-backdrop')) {
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target.classList.contains('reflection-backdrop')) {
                 closeReflectionModal();
             }
         });
@@ -3377,14 +3411,16 @@ function initReflections() {
     
     document.addEventListener('keydown', (e) => {
         if (e.key === 'r' || e.key === 'R') {
+            const modal = document.getElementById('reflection-modal');
             if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) && 
                 document.body.classList.contains('toc-hidden') && 
-                !reflectionModal.classList.contains('visible') &&
+                modal && !modal.classList.contains('visible') &&
                 !isSlideshowMode) {
                 openReflectionModal();
             }
         }
-        if (e.key === 'Escape' && reflectionModal.classList.contains('visible')) {
+        const modal = document.getElementById('reflection-modal');
+        if (e.key === 'Escape' && modal && modal.classList.contains('visible')) {
             closeReflectionModal();
         }
     });
