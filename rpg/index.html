@@ -1146,12 +1146,48 @@
 
         // World-specific music themes
         const MUSIC_THEMES = {
-            hub: { baseNote: 392, scale: [0, 2, 4, 5, 7, 9, 11] }, // G major - welcoming
-            vibe: { baseNote: 349, scale: [0, 2, 3, 5, 7, 8, 10] }, // F minor - dreamy
-            agent: { baseNote: 330, scale: [0, 2, 3, 5, 7, 8, 11] }, // E harmonic minor - mechanical
-            research: { baseNote: 440, scale: [0, 2, 4, 6, 7, 9, 11] }, // A lydian - futuristic
-            builder: { baseNote: 294, scale: [0, 2, 4, 5, 7, 9, 10] }, // D mixolydian - crafty
-            consulting: { baseNote: 262, scale: [0, 2, 3, 5, 7, 9, 10] }  // C dorian - strategic
+            hub: { 
+                baseNote: 392, 
+                scale: [0, 2, 4, 7, 9], // G Major Pentatonic - Open, welcoming, adventurous
+                tempo: 400,
+                type: 'triangle',
+                bassType: 'sine'
+            }, 
+            vibe: { 
+                baseNote: 349, 
+                scale: [0, 4, 7, 11, 14], // F Major 7th arpeggio - Dreamy, ethereal, chill
+                tempo: 300,
+                type: 'sine',
+                bassType: 'triangle'
+            }, 
+            agent: { 
+                baseNote: 330, 
+                scale: [0, 3, 7, 10, 12], // E Minor 7th - Mechanical, focused, persistent
+                tempo: 250,
+                type: 'square',
+                bassType: 'sawtooth'
+            }, 
+            research: { 
+                baseNote: 440, 
+                scale: [0, 2, 6, 7, 11], // A Lydian - Futuristic, curious, scientific
+                tempo: 350,
+                type: 'sine',
+                bassType: 'square'
+            }, 
+            builder: { 
+                baseNote: 294, 
+                scale: [0, 2, 5, 7, 10], // D Mixolydian (ish) - Sturdy, crafting, industrial
+                tempo: 450,
+                type: 'triangle',
+                bassType: 'sawtooth'
+            }, 
+            consulting: { 
+                baseNote: 262, 
+                scale: [0, 3, 5, 7, 10], // C Dorian - Strategic, sophisticated, thoughtful
+                tempo: 500,
+                type: 'triangle',
+                bassType: 'sine'
+            }  
         };
 
         let currentMusicIndex = 0;
@@ -1179,20 +1215,31 @@
             const theme = MUSIC_THEMES[gameState.currentWorld] || MUSIC_THEMES.hub;
             const scaleIndex = currentMusicIndex % theme.scale.length;
             const octave = Math.floor(currentMusicIndex / theme.scale.length) % 2;
-            const noteFreq = theme.baseNote * Math.pow(2, (theme.scale[scaleIndex] + octave * 12) / 12);
+            
+            // Randomize octave slightly for variety
+            const randomOctaveOffset = Math.random() > 0.8 ? 1 : 0;
+            
+            const noteFreq = theme.baseNote * Math.pow(2, (theme.scale[scaleIndex] + (octave + randomOctaveOffset) * 12) / 12);
 
             // Melody
             if (currentMusicIndex % 2 === 0 || Math.random() > 0.3) {
-                playNote(noteFreq, 0.3, 'triangle', musicGain, 0.2);
+                playNote(noteFreq, theme.tempo / 1000 * 0.8, theme.type, musicGain, 0.2);
             }
 
             // Bass on beats 0 and 4
             if (currentMusicIndex % 4 === 0) {
-                playNote(theme.baseNote / 2, 0.4, 'sine', musicGain, 0.15);
+                playNote(theme.baseNote / 2, theme.tempo / 1000, theme.bassType, musicGain, 0.15);
+            }
+            
+            // Occasional arpeggio or flourish
+            if (currentMusicIndex % 8 === 7 && Math.random() > 0.5) {
+                 setTimeout(() => {
+                     playNote(noteFreq * 1.5, 0.1, theme.type, musicGain, 0.1);
+                 }, theme.tempo / 2);
             }
 
             currentMusicIndex = (currentMusicIndex + 1) % 16;
-            musicTimeout = setTimeout(playMusicNote, 350);
+            musicTimeout = setTimeout(playMusicNote, theme.tempo);
         }
 
         function toggleSound() {
