@@ -1213,6 +1213,83 @@
             }
         }
 
+        /* Explore More Cards */
+        .explore-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin: 2rem 0;
+        }
+
+        .explore-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .explore-card:hover {
+            border-color: var(--accent-coral);
+            box-shadow: 0 8px 32px rgba(224, 122, 95, 0.2);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .explore-card-thumb {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .explore-card-thumb::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 8px 8px;
+        }
+
+        .explore-card-thumb svg {
+            width: 100%;
+            height: 100%;
+            max-width: 180px;
+            max-height: 120px;
+        }
+
+        .explore-card-body {
+            padding: 1.25rem;
+        }
+
+        .explore-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .explore-card-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .explore-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media print {
             #toc-panel,
             #floating-actions,
@@ -1232,30 +1309,6 @@
     </style>
 </head>
 <body>
-
-<!-- Site Navigation -->
-<nav class="site-nav">
-    <div class="site-nav-left">
-        <span class="site-nav-title">Vibe Code Camp</span>
-    </div>
-    <div class="site-nav-links">
-        <a href="cards.html" class="nav-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-            </svg>
-            Speaker Cards
-        </a>
-        <a href="rpg/" class="nav-link nav-link-accent">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-            </svg>
-            Play RPG
-        </a>
-    </div>
-</nav>
 
 <!-- Reading Progress Bar -->
 <div id="reading-progress"></div>
@@ -1323,6 +1376,86 @@
 <p class="video-caption">
     Click the thumbnail to watch on YouTube <span>(opens in a new tab)</span>
 </p>
+
+<!-- Explore More Cards -->
+<div class="explore-cards">
+    <a href="cards.html" class="explore-card">
+        <div class="explore-card-thumb">
+            <svg viewBox="0 0 180 120" fill="none">
+                <!-- Card grid pixel art -->
+                <rect x="10" y="10" width="45" height="45" rx="4" fill="#0f0f23" stroke="#70d080" stroke-width="2"/>
+                <rect x="18" y="18" width="12" height="12" fill="#70d080"/>
+                <rect x="18" y="34" width="28" height="4" fill="#404060"/>
+                <rect x="18" y="42" width="20" height="4" fill="#404060"/>
+                
+                <rect x="65" y="10" width="45" height="45" rx="4" fill="#0f0f23" stroke="#ff6040" stroke-width="2"/>
+                <rect x="73" y="18" width="12" height="12" fill="#ff6040"/>
+                <rect x="73" y="34" width="28" height="4" fill="#404060"/>
+                <rect x="73" y="42" width="20" height="4" fill="#404060"/>
+                
+                <rect x="120" y="10" width="45" height="45" rx="4" fill="#0f0f23" stroke="#40c0ff" stroke-width="2"/>
+                <rect x="128" y="18" width="12" height="12" fill="#40c0ff"/>
+                <rect x="128" y="34" width="28" height="4" fill="#404060"/>
+                <rect x="128" y="42" width="20" height="4" fill="#404060"/>
+                
+                <rect x="37" y="65" width="45" height="45" rx="4" fill="#0f0f23" stroke="#d0a040" stroke-width="2"/>
+                <rect x="45" y="73" width="12" height="12" fill="#d0a040"/>
+                <rect x="45" y="89" width="28" height="4" fill="#404060"/>
+                <rect x="45" y="97" width="20" height="4" fill="#404060"/>
+                
+                <rect x="92" y="65" width="45" height="45" rx="4" fill="#0f0f23" stroke="#8080c0" stroke-width="2"/>
+                <rect x="100" y="73" width="12" height="12" fill="#8080c0"/>
+                <rect x="100" y="89" width="28" height="4" fill="#404060"/>
+                <rect x="100" y="97" width="20" height="4" fill="#404060"/>
+            </svg>
+        </div>
+        <div class="explore-card-body">
+            <div class="explore-card-title">Speaker Cards</div>
+            <div class="explore-card-desc">Browse all 20 speakers in card, table, and timeline views. Filter by world and search insights.</div>
+        </div>
+    </a>
+    <a href="rpg/" class="explore-card">
+        <div class="explore-card-thumb">
+            <svg viewBox="0 0 180 120" fill="none">
+                <!-- RPG pixel art scene -->
+                <!-- Ground -->
+                <rect x="0" y="100" width="180" height="20" fill="#2d4a2d"/>
+                <rect x="0" y="96" width="180" height="4" fill="#3d5a3d"/>
+                
+                <!-- Character -->
+                <rect x="80" y="68" width="20" height="28" fill="#5cb8b2"/>
+                <rect x="84" y="60" width="12" height="12" fill="#ffcc99"/>
+                <rect x="86" y="64" width="2" height="2" fill="#333"/>
+                <rect x="92" y="64" width="2" height="2" fill="#333"/>
+                <rect x="76" y="72" width="4" height="12" fill="#5cb8b2"/>
+                <rect x="100" y="72" width="4" height="12" fill="#5cb8b2"/>
+                
+                <!-- NPC with ! -->
+                <rect x="130" y="68" width="16" height="24" fill="#e07a5f"/>
+                <rect x="133" y="62" width="10" height="10" fill="#ffcc99"/>
+                <rect x="136" y="52" width="4" height="8" fill="#ffd700"/>
+                <rect x="136" y="48" width="4" height="2" fill="#ffd700"/>
+                
+                <!-- Trees -->
+                <rect x="20" y="50" width="8" height="46" fill="#5a3d2b"/>
+                <polygon points="24,20 8,55 40,55" fill="#2d5a2d"/>
+                <polygon points="24,35 12,60 36,60" fill="#3d6a3d"/>
+                
+                <rect x="150" y="60" width="6" height="36" fill="#5a3d2b"/>
+                <polygon points="153,35 143,65 163,65" fill="#2d5a2d"/>
+                
+                <!-- Journal icon -->
+                <rect x="10" y="10" width="24" height="20" rx="2" fill="#1a1a2e" stroke="#b39ddb" stroke-width="2"/>
+                <rect x="14" y="16" width="16" height="2" fill="#b39ddb"/>
+                <rect x="14" y="22" width="12" height="2" fill="#b39ddb"/>
+            </svg>
+        </div>
+        <div class="explore-card-body">
+            <div class="explore-card-title">Play the RPG</div>
+            <div class="explore-card-desc">Explore 6 worlds, talk to NPCs, and collect insights from all 20 speakers in this pixel adventure.</div>
+        </div>
+    </a>
+</div>
 
 <hr>
 
