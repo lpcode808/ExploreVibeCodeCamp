@@ -1,0 +1,2945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Code Camp - Full Transcript Guide</title>
+    <meta name="description" content="Explore the 8-hour Vibe Code Camp livestream featuring the world's best vibe coders building with Claude Code, Opus 4.5, and AI tools.">
+    <style>
+        :root {
+            --bg-primary: #2b2b2b;
+            --bg-secondary: #343434;
+            --bg-code: #1e1e1e;
+            --bg-code-header: #2a2a2a;
+            --text-primary: #ececec;
+            --text-secondary: #b4b4b4;
+            --text-muted: #8b8b8b;
+            --accent-coral: #e07a5f;
+            --accent-teal: #5cb8b2;
+            --accent-green: #81b88b;
+            --accent-purple: #b39ddb;
+            --border: #404040;
+            --link: #8ab4f8;
+            --font-body: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Segoe UI', -apple-system, sans-serif;
+            --font-mono: 'SF Mono', 'Menlo', 'Monaco', monospace;
+            --content-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+            --toc-width: 320px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background:
+                radial-gradient(1200px 600px at 8% -10%, rgba(224, 122, 95, 0.16), transparent 60%),
+                radial-gradient(900px 520px at 100% 5%, rgba(92, 184, 178, 0.14), transparent 55%),
+                radial-gradient(800px 720px at 70% 110%, rgba(179, 157, 219, 0.12), transparent 60%),
+                linear-gradient(160deg, #232323 0%, #2b2b2b 45%, #303030 100%);
+            color: var(--text-primary);
+            line-height: 1.75;
+            font-size: 16px;
+            min-height: 100vh;
+            position: relative;
+            isolation: isolate;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: -20% 0 0 0;
+            background:
+                radial-gradient(400px 240px at 20% 20%, rgba(224, 122, 95, 0.18), transparent 65%),
+                radial-gradient(340px 260px at 75% 15%, rgba(92, 184, 178, 0.16), transparent 70%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(120deg, rgba(236, 236, 236, 0.04) 1px, transparent 1px),
+                linear-gradient(30deg, rgba(236, 236, 236, 0.035) 1px, transparent 1px);
+            background-size: 32px 32px, 48px 48px;
+            opacity: 0.35;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 56px 64px;
+            max-width: 920px;
+            margin: 36px auto;
+            margin-left: var(--toc-width);
+            width: 100%;
+            background: linear-gradient(180deg, rgba(52, 52, 52, 0.96), rgba(43, 43, 43, 0.94));
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: var(--content-shadow);
+            transition: margin-left 0.2s;
+        }
+
+        body.toc-hidden .main-content {
+            margin-left: auto;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: 1.55rem;
+            font-weight: 600;
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+            color: #fff;
+            letter-spacing: -0.01em;
+            position: relative;
+            padding-left: 0.9rem;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.45em;
+            width: 0.35rem;
+            height: 0.9rem;
+            border-radius: 999px;
+            background: linear-gradient(180deg, var(--accent-coral), var(--accent-teal));
+            opacity: 0.9;
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        p { margin-bottom: 1rem; }
+
+        a {
+            color: var(--link);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        ul, ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        li { margin-bottom: 0.5rem; }
+
+        strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        em { color: var(--text-secondary); }
+
+        ::selection {
+            background: rgba(224, 122, 95, 0.3);
+            color: #fff;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.875em;
+            background: var(--bg-code);
+            padding: 0.2em 0.5em;
+            border-radius: 6px;
+            color: var(--accent-coral);
+            border: 1px solid var(--border);
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 2.5rem 0;
+        }
+
+        /* Speaker Cards */
+        .speaker-card {
+            background: var(--bg-code);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .speaker-card:hover {
+            border-color: var(--accent-coral);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .speaker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .speaker-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+        }
+
+        .speaker-org {
+            font-size: 0.875rem;
+            color: var(--accent-teal);
+        }
+
+        .speaker-timestamp {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+        }
+
+        .speaker-timestamp a {
+            color: inherit;
+        }
+
+        .speaker-timestamp a:hover {
+            color: var(--accent-coral);
+        }
+
+        .speaker-topic {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .speaker-highlights {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .speaker-highlights li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .speaker-highlights li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-coral);
+        }
+
+        /* Category tags */
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tag-agents { background: rgba(224, 122, 95, 0.2); color: var(--accent-coral); }
+        .tag-workflow { background: rgba(92, 184, 178, 0.2); color: var(--accent-teal); }
+        .tag-tools { background: rgba(179, 157, 219, 0.2); color: var(--accent-purple); }
+        .tag-philosophy { background: rgba(129, 184, 139, 0.2); color: var(--accent-green); }
+        .tag-nontechnical { background: rgba(138, 180, 248, 0.2); color: var(--link); }
+
+        /* Callout boxes */
+        .callout {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent-coral);
+        }
+
+        .callout-teal { border-left-color: var(--accent-teal); }
+        .callout-purple { border-left-color: var(--accent-purple); }
+
+        .callout p:last-child { margin-bottom: 0; }
+        .callout-green { border-left-color: var(--accent-green); }
+
+        /* Concept Cards */
+        .concept-card {
+            background: var(--bg-code);
+            border-radius: 16px;
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .concept-card:hover {
+            border-color: var(--accent-teal);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .concept-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .concept-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+        }
+
+        .concept-tldr {
+            font-size: 1rem;
+            color: var(--accent-teal);
+            font-style: italic;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--accent-teal);
+        }
+
+        .concept-section {
+            margin-bottom: 1.25rem;
+        }
+
+        .concept-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .concept-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-coral);
+            margin-bottom: 0.5rem;
+        }
+
+        .concept-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .concept-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Speaker References in Concepts */
+        .speaker-ref {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(138, 180, 248, 0.1);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--link);
+            text-decoration: none;
+            transition: all 0.2s;
+            margin: 2px;
+        }
+
+        .speaker-ref:hover {
+            background: rgba(138, 180, 248, 0.2);
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .speaker-ref .timestamp {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Related Links */
+        .related-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 1rem;
+        }
+
+        .related-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 999px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .related-link:hover {
+            background: var(--accent-coral);
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .related-link.concept-link {
+            border: 1px solid var(--border);
+        }
+
+        .related-link.concept-link:hover {
+            background: var(--accent-teal);
+            border-color: var(--accent-teal);
+        }
+
+        /* Big Shift Section */
+        .big-shift {
+            background: linear-gradient(135deg, rgba(224, 122, 95, 0.1), rgba(92, 184, 178, 0.1));
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .big-shift h2 {
+            margin-top: 0;
+        }
+
+        .shift-comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1.5rem;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .shift-comparison {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        .shift-box {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .shift-box.old {
+            border: 1px solid var(--border);
+        }
+
+        .shift-box.new {
+            border: 1px solid var(--accent-teal);
+            box-shadow: 0 4px 16px rgba(92, 184, 178, 0.15);
+        }
+
+        .shift-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .shift-box.new .shift-label {
+            color: var(--accent-teal);
+        }
+
+        .shift-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .shift-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .shift-arrow {
+            font-size: 2rem;
+            color: var(--accent-coral);
+        }
+
+        /* Pathways Section - Horizontal Strips */
+        .pathways {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .pathway-card {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .pathway-card:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .pathway-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .pathway-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .pathway-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .pathway-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: none;
+        }
+
+        .pathway-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .pathway-links a {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+            padding: 4px 10px;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .pathway-links a:hover {
+            background: var(--accent-coral);
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .pathway-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .pathway-links {
+                width: 100%;
+            }
+        }
+
+        /* TOC Divider */
+        .toc-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 12px 20px;
+        }
+
+        /* Video embed */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .video-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 0;
+        }
+
+        .video-caption {
+            margin: 0.75rem 0 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .video-caption span {
+            color: var(--accent-teal);
+            font-weight: 600;
+        }
+
+        .video-link {
+            display: block;
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid var(--border);
+            margin: 1rem 0;
+        }
+
+        .video-link:hover {
+            border-color: var(--accent-coral);
+            text-decoration: none;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* TOC Sidebar */
+        #toc-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--toc-width);
+            z-index: 900;
+            background: linear-gradient(180deg, rgba(52, 52, 52, 0.98), rgba(43, 43, 43, 0.96));
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 6px 0 24px rgba(0, 0, 0, 0.35);
+            transition: transform 0.2s;
+        }
+
+        body.toc-hidden #toc-panel {
+            transform: translateX(-100%);
+        }
+
+        .toc-header {
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .toc-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .toc-search {
+            position: relative;
+        }
+
+        .toc-search input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .toc-search input:focus {
+            border-color: var(--accent-coral);
+        }
+
+        .toc-search input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .toc-search svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .toc-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+        }
+
+        .toc-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .toc-nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .toc-nav::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .toc-section {
+            margin-bottom: 4px;
+        }
+
+        .toc-section > a {
+            display: block;
+            padding: 10px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .toc-section > a:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .toc-section > a.active {
+            background: var(--accent-coral);
+            color: #fff;
+            border-left-color: var(--accent-coral);
+            font-weight: 600;
+        }
+
+        .toc-time {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-right: 8px;
+        }
+
+        .toc-section > a.active .toc-time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Reading Progress Bar */
+        #reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-coral), var(--accent-teal));
+            z-index: 1000;
+        }
+
+        /* Floating Action Buttons */
+        #floating-actions {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 999;
+        }
+
+        .fab {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--accent-coral);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s;
+        }
+
+        .fab:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .fab-secondary {
+            background: var(--bg-secondary);
+            width: 48px;
+            height: 48px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .fab-secondary.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .fab-search {
+            background: var(--bg-secondary);
+            width: 48px;
+            height: 48px;
+        }
+
+        .fab-slideshow {
+            background: var(--bg-secondary);
+            width: 48px;
+            height: 48px;
+        }
+
+        .fab-slideshow.active {
+            background: var(--accent-teal);
+        }
+
+        /* Slideshow Mode */
+        .slideshow-hidden {
+            display: none !important;
+        }
+
+        #slideshow-nav {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(43, 43, 43, 0.95);
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            backdrop-filter: blur(12px);
+        }
+
+        .slide-nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .slide-nav-btn:hover {
+            background: var(--bg-code);
+            color: var(--text-primary);
+        }
+
+        .slide-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+            max-width: 300px;
+            overflow-x: auto;
+            padding: 4px 0;
+        }
+
+        .slide-dots::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slide-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .slide-dot:hover {
+            background: var(--text-muted);
+        }
+
+        .slide-dot.active {
+            background: var(--accent-coral);
+            transform: scale(1.25);
+        }
+
+        .slide-counter {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            margin-left: 8px;
+        }
+
+        /* Slideshow mode body state */
+        body.slideshow-mode {
+            overflow: hidden;
+        }
+
+        body.slideshow-mode .main-content {
+            position: fixed;
+            inset: 0;
+            margin: 0 !important;
+            padding: 0;
+            max-width: none;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            background: var(--bg-primary);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.slideshow-mode #toc-panel,
+        body.slideshow-mode #reading-progress,
+        body.slideshow-mode #floating-actions {
+            display: none !important;
+        }
+
+        /* Hide content before first section in slideshow mode */
+        body.slideshow-mode .main-content > h1,
+        body.slideshow-mode .main-content > .subtitle,
+        body.slideshow-mode .main-content > .video-container,
+        body.slideshow-mode .main-content > hr:first-of-type {
+            display: none;
+        }
+
+        /* Slide sections - normal block flow in scroll mode */
+        .slide-section {
+            display: block;
+        }
+
+        /* Slideshow mode: stack all slides, show only active */
+        body.slideshow-mode .slide-section {
+            position: absolute;
+            inset: 0;
+            padding: 60px 80px 100px;
+            overflow-y: auto;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            background: var(--bg-primary);
+            transform: translateX(40px);
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s 0.25s;
+        }
+
+        body.slideshow-mode .slide-section.active {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0);
+            z-index: 1;
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s 0s;
+        }
+
+        body.slideshow-mode .slide-section.prev {
+            transform: translateX(-40px);
+        }
+
+        /* Slide content styling */
+        body.slideshow-mode .slide-section > * {
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        body.slideshow-mode .slide-section h2 {
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Mobile adjustments for slideshow */
+        @media (max-width: 768px) {
+            body.slideshow-mode .slide-section {
+                padding: 40px 24px 120px;
+            }
+
+            #slideshow-nav {
+                padding: 10px 16px;
+                gap: 12px;
+            }
+
+            .slide-dots {
+                max-width: 180px;
+            }
+        }
+
+        /* Search Modal */
+        #search-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 15vh;
+        }
+
+        #search-modal.modal-hidden {
+            display: none;
+        }
+
+        .search-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+        }
+
+        .search-content {
+            position: relative;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 70vh;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border);
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            gap: 12px;
+        }
+
+        .search-input-wrapper svg {
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        #search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.125rem;
+            outline: none;
+        }
+
+        #search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        #search-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            border-radius: 4px;
+        }
+
+        #search-close:hover {
+            background: var(--bg-code);
+            color: var(--text-primary);
+        }
+
+        .search-results {
+            max-height: calc(70vh - 120px);
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .search-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .search-result {
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .search-result:hover,
+        .search-result.selected {
+            background: var(--bg-code);
+        }
+
+        .search-result-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .search-result-preview {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-result mark {
+            background: rgba(224, 122, 95, 0.3);
+            color: var(--accent-coral);
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .search-hint {
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 16px;
+        }
+
+        .search-hint kbd {
+            background: var(--bg-code);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            :root {
+                --toc-width: 280px;
+            }
+
+            #toc-panel {
+                transform: translateX(-100%);
+            }
+
+            body:not(.toc-hidden) #toc-panel {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                margin: 16px;
+                padding: 32px 24px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .main-content {
+                padding: 24px 16px;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            h2 {
+                font-size: 1.25rem;
+            }
+
+            .speaker-header {
+                flex-direction: column;
+            }
+        }
+
+        @media print {
+            #toc-panel,
+            #floating-actions,
+            #reading-progress,
+            #search-modal {
+                display: none !important;
+            }
+
+            .main-content {
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                border: none;
+                background: transparent;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Site Navigation -->
+<nav class="site-nav">
+    <div class="site-nav-left">
+        <span class="site-nav-title">Vibe Code Camp</span>
+    </div>
+    <div class="site-nav-links">
+        <a href="cards.html" class="nav-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            Speaker Cards
+        </a>
+        <a href="rpg/" class="nav-link nav-link-accent">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            Play RPG
+        </a>
+    </div>
+</nav>
+
+<!-- Reading Progress Bar -->
+<div id="reading-progress"></div>
+
+<!-- TOC Sidebar -->
+<div id="toc-panel">
+    <div class="toc-header">
+        <div class="toc-title">Vibe Code Camp</div>
+        <div class="toc-subtitle">8-hour livestream transcript</div>
+        <div class="toc-search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" id="toc-filter" placeholder="Filter...">
+        </div>
+    </div>
+    <nav class="toc-nav" id="toc-nav">
+        <div class="toc-section"><a href="#overview" data-id="overview">Overview</a></div>
+        <div class="toc-section"><a href="#big-shift" data-id="big-shift">The Big Shift</a></div>
+        <div class="toc-section"><a href="#pathways" data-id="pathways">Where to Start</a></div>
+        <div class="toc-divider"></div>
+        <div class="toc-section"><a href="#agent-native" data-id="agent-native">Agent-Native Software</a></div>
+        <div class="toc-section"><a href="#tasks-vs-todos" data-id="tasks-vs-todos">Tasks vs To-Dos</a></div>
+        <div class="toc-section"><a href="#compound-engineering" data-id="compound-engineering">Compound Engineering</a></div>
+        <div class="toc-section"><a href="#malleable-software" data-id="malleable-software">Malleable Software</a></div>
+        <div class="toc-section"><a href="#mcp" data-id="mcp">MCP (Tool Connections)</a></div>
+        <div class="toc-section"><a href="#multi-model" data-id="multi-model">Multi-Model Teams</a></div>
+        <div class="toc-section"><a href="#delete-code" data-id="delete-code">Delete Code Mindset</a></div>
+        <div class="toc-section"><a href="#reverse-engineering" data-id="reverse-engineering">Learn by Taking Apart</a></div>
+        <div class="toc-divider"></div>
+        <div class="toc-section"><a href="#dan-shipper" data-id="dan-shipper"><span class="toc-time">0:00</span>Dan Shipper</a></div>
+        <div class="toc-section"><a href="#ben-tossell" data-id="ben-tossell"><span class="toc-time">0:31</span>Ben Tossell</a></div>
+        <div class="toc-section"><a href="#ashe-magalhaes" data-id="ashe-magalhaes"><span class="toc-time">0:59</span>Ashe Magalhaes</a></div>
+        <div class="toc-section"><a href="#ryan-carson" data-id="ryan-carson"><span class="toc-time">1:30</span>Ryan Carson</a></div>
+        <div class="toc-section"><a href="#natalia-nityesh" data-id="natalia-nityesh"><span class="toc-time">2:00</span>Natalia & Nityesh</a></div>
+        <div class="toc-section"><a href="#katie-parrott" data-id="katie-parrott"><span class="toc-time">2:13</span>Katie Parrott</a></div>
+        <div class="toc-section"><a href="#nat-eliason" data-id="nat-eliason"><span class="toc-time">2:30</span>Nat Eliason</a></div>
+        <div class="toc-section"><a href="#tina-he" data-id="tina-he"><span class="toc-time">3:02</span>Tina He</a></div>
+        <div class="toc-section"><a href="#paula-dozsa" data-id="paula-dozsa"><span class="toc-time">3:31</span>Paula Dozsa</a></div>
+        <div class="toc-section"><a href="#cj-hess" data-id="cj-hess"><span class="toc-time">4:02</span>CJ Hess</a></div>
+        <div class="toc-section"><a href="#logan-ammaar" data-id="logan-ammaar"><span class="toc-time">4:31</span>Logan & Ammaar</a></div>
+        <div class="toc-section"><a href="#geoffrey-litt" data-id="geoffrey-litt"><span class="toc-time">4:59</span>Geoffrey Litt</a></div>
+        <div class="toc-section"><a href="#kevin-kieran" data-id="kevin-kieran"><span class="toc-time">5:29</span>Kevin & Kieran</a></div>
+        <div class="toc-section"><a href="#thariq-shihipar" data-id="thariq-shihipar"><span class="toc-time">6:02</span>Thariq Shihipar</a></div>
+        <div class="toc-section"><a href="#naveen-naidu" data-id="naveen-naidu"><span class="toc-time">6:30</span>Naveen Naidu</a></div>
+        <div class="toc-section"><a href="#yash-poojary" data-id="yash-poojary"><span class="toc-time">6:59</span>Yash Poojary</a></div>
+        <div class="toc-section"><a href="#brooker-belcourt" data-id="brooker-belcourt"><span class="toc-time">7:29</span>Brooker Belcourt</a></div>
+        <div class="toc-divider"></div>
+        <div class="toc-section"><a href="#resources" data-id="resources">Resources</a></div>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+
+<h1>Vibe Code Camp</h1>
+<p class="subtitle">The full transcript from Every's 8-hour marathon livestream featuring the world's best vibe coders building live with Claude Code, Opus 4.5, and AI tools.</p>
+
+<a href="https://www.youtube.com/watch?v=5YBjll9XJlw" target="_blank" rel="noopener noreferrer">
+    <div class="video-container">
+        <img src="https://img.youtube.com/vi/5YBjll9XJlw/maxresdefault.jpg" alt="Vibe Code Camp — Full Livestream video thumbnail" loading="lazy">
+    </div>
+</a>
+<p class="video-caption">
+    Click the thumbnail to watch on YouTube <span>(opens in a new tab)</span>
+</p>
+
+<hr>
+
+<h2 id="overview">Overview</h2>
+
+<p>This transcript captures practical workflows, tool recommendations, and real demos from founders, engineers, and creators shipping production software with AI. Use it to learn from specific speakers, find relevant sections for what you're building, or surface actionable insights.</p>
+
+<div class="callout callout-teal">
+    <p><strong>How to use this resource:</strong></p>
+    <ul>
+        <li>Press <kbd>S</kbd> for <strong>slideshow mode</strong> — use arrow keys to navigate</li>
+        <li>Use <kbd>Cmd+K</kbd> to search speakers, topics, and tools</li>
+        <li>Click any speaker to jump to their section</li>
+        <li>Timestamps link directly to that moment in the video</li>
+    </ul>
+</div>
+
+<!-- The Big Shift -->
+<section class="big-shift">
+    <h2 id="big-shift">The Big Shift</h2>
+    <p>
+        Before you dive into the concepts and speakers, here's the core idea that runs through the entire event:
+    </p>
+
+    <div class="shift-comparison">
+        <div class="shift-box old">
+            <div class="shift-label">Yesterday</div>
+            <div class="shift-title">AI as Assistant</div>
+            <div class="shift-desc">"Help me write this email"</div>
+        </div>
+        <div class="shift-arrow">→</div>
+        <div class="shift-box new">
+            <div class="shift-label">Today</div>
+            <div class="shift-title">AI as Collaborator</div>
+            <div class="shift-desc">"Work alongside me on this project"</div>
+        </div>
+    </div>
+
+    <p>
+        The speakers aren't just asking AI to answer questions. They're building <strong>systems</strong> where AI agents
+        plan, execute, review, and improve—sometimes running 24/7 without human supervision.
+    </p>
+    <p>
+        This isn't science fiction. People are shipping real products, running real businesses, and building real tools
+        using these approaches <em>today</em>.
+    </p>
+</section>
+
+<!-- Where to Start - Quick Entry Points -->
+<h2 id="pathways">Where Should You Start?</h2>
+<p style="margin-bottom: 1rem;">8 hours is a lot. Pick a path based on what you're interested in:</p>
+
+<div class="pathways">
+    <div class="pathway-card">
+        <div class="pathway-icon">🎨</div>
+        <div class="pathway-content">
+            <div class="pathway-title">I'm Not a Coder</div>
+        </div>
+        <div class="pathway-links">
+            <a href="#ben-tossell">Ben Tossell</a>
+            <a href="#tina-he">Tina He</a>
+            <a href="#paula-dozsa">Paula Dozsa</a>
+        </div>
+    </div>
+
+    <div class="pathway-card">
+        <div class="pathway-icon">⚙️</div>
+        <div class="pathway-content">
+            <div class="pathway-title">I Want to Build Apps</div>
+        </div>
+        <div class="pathway-links">
+            <a href="#dan-shipper">Dan Shipper</a>
+            <a href="#cj-hess">CJ Hess</a>
+            <a href="#nat-eliason">Nat Eliason</a>
+        </div>
+    </div>
+
+    <div class="pathway-card">
+        <div class="pathway-icon">🧠</div>
+        <div class="pathway-content">
+            <div class="pathway-title">I Want the Big Picture</div>
+        </div>
+        <div class="pathway-links">
+            <a href="#geoffrey-litt">Geoffrey Litt</a>
+            <a href="#thariq-shihipar">Thariq Shihipar</a>
+            <a href="#kevin-kieran">Kevin & Kieran</a>
+        </div>
+    </div>
+
+    <div class="pathway-card">
+        <div class="pathway-icon">🚀</div>
+        <div class="pathway-content">
+            <div class="pathway-title">I Want to Ship Fast</div>
+        </div>
+        <div class="pathway-links">
+            <a href="#ryan-carson">Ryan Carson</a>
+            <a href="#yash-poojary">Yash Poojary</a>
+            <a href="#brooker-belcourt">Brooker Belcourt</a>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h2 id="concepts">Core Concepts</h2>
+<p>
+    These are the key ideas discussed throughout the event. Each one builds on the others—click the related links
+    to see how they connect, or jump to speakers who explain them best.
+</p>
+
+<!-- Concept 1: Agent-Native Software -->
+<div class="concept-card" id="agent-native">
+    <div class="concept-header">
+        <h3 class="concept-title">Agent-Native Software</h3>
+        <span class="tag tag-agents">Agents</span>
+    </div>
+    <div class="concept-tldr">
+        Software designed so AI can actually use it, not just talk about it.
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">What Is It?</div>
+        <div class="concept-text">
+            <p>
+                Most apps today were built for humans to click around. Agent-native software is designed differently:
+                it's built so that an AI agent can operate the app alongside you—creating, editing, organizing, and
+                automating tasks just like a skilled coworker would.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Why Should You Care?</div>
+        <div class="concept-text">
+            <p>
+                If you use any software regularly—even just Google Docs or Notion—this matters. Imagine your tools
+                could actually <em>do work</em> instead of just waiting for you to click buttons. That's where
+                software is heading.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Who Explains It Best</div>
+        <div class="concept-text">
+            <a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=0s" target="_blank" class="speaker-ref">
+                Dan Shipper <span class="timestamp">0:00:00</span>
+            </a>
+            <a href="#dan-shipper" class="speaker-ref">
+                Full profile →
+            </a>
+        </div>
+    </div>
+
+    <div class="related-links">
+        <span style="font-size: 0.75rem; color: var(--text-muted); margin-right: 8px;">Related:</span>
+        <a href="#malleable-software" class="related-link concept-link">Malleable Software</a>
+        <a href="#mcp" class="related-link concept-link">MCP</a>
+        <a href="#tasks-vs-todos" class="related-link concept-link">Tasks vs To-Dos</a>
+    </div>
+</div>
+
+<!-- Concept 2: Tasks vs To-Dos -->
+<div class="concept-card" id="tasks-vs-todos">
+    <div class="concept-header">
+        <h3 class="concept-title">Tasks Replace To-Dos</h3>
+        <span class="tag tag-philosophy">Philosophy</span>
+    </div>
+    <div class="concept-tldr">
+        Stop thinking in checkboxes. Start thinking in persistent objects.
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">What Is It?</div>
+        <div class="concept-text">
+            <p>
+                A to-do list is something you check off and throw away. A <strong>task</strong> is more like an object in
+                your world—it persists, evolves, connects to other things, and can be picked up by you or an AI agent
+                at any time.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Why Should You Care?</div>
+        <div class="concept-text">
+            <p>
+                If you've ever felt overwhelmed by your to-do list, this reframe helps. Tasks aren't about "getting to inbox
+                zero"—they're about maintaining an honest map of your commitments. And when AI can see that map, it can
+                actually help manage it.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Who Explains It Best</div>
+        <div class="concept-text">
+            <a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=21740s" target="_blank" class="speaker-ref">
+                Thariq Shihipar <span class="timestamp">6:02:20</span>
+            </a>
+            <a href="#thariq-shihipar" class="speaker-ref">
+                Full profile →
+            </a>
+        </div>
+    </div>
+
+    <div class="related-links">
+        <span style="font-size: 0.75rem; color: var(--text-muted); margin-right: 8px;">Related:</span>
+        <a href="#compound-engineering" class="related-link concept-link">Compound Engineering</a>
+        <a href="#agent-native" class="related-link concept-link">Agent-Native Software</a>
+    </div>
+</div>
+
+<!-- Concept 3: Compound Engineering -->
+<div class="concept-card" id="compound-engineering">
+    <div class="concept-header">
+        <h3 class="concept-title">Compound Engineering</h3>
+        <span class="tag tag-workflow">Workflow</span>
+    </div>
+    <div class="concept-tldr">
+        Each cycle makes the next one faster. Like compound interest, but for building.
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">What Is It?</div>
+        <div class="concept-text">
+            <p>
+                A workflow where you: <strong>Plan → Work → Review → Save learnings</strong>. The key insight is that
+                the "save learnings" step makes your next cycle faster. Over time, your building velocity
+                compounds—just like interest in a savings account.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Why Should You Care?</div>
+        <div class="concept-text">
+            <p>
+                Most people work in fits and starts, losing context between sessions. This approach means you never
+                start from zero. Your AI collaborator remembers what worked, what failed, and what to try next.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Who Explains It Best</div>
+        <div class="concept-text">
+            <a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=19791s" target="_blank" class="speaker-ref">
+                Kevin Rose & Kieran Klaassen <span class="timestamp">5:29:51</span>
+            </a>
+            <a href="#kevin-kieran" class="speaker-ref">
+                Full profile →
+            </a>
+        </div>
+    </div>
+
+    <div class="related-links">
+        <span style="font-size: 0.75rem; color: var(--text-muted); margin-right: 8px;">Related:</span>
+        <a href="#tasks-vs-todos" class="related-link concept-link">Tasks vs To-Dos</a>
+        <a href="#multi-model" class="related-link concept-link">Multi-Model Teams</a>
+        <a href="#delete-code" class="related-link concept-link">Delete Code Mindset</a>
+    </div>
+</div>
+
+<!-- Concept 4: Malleable Software -->
+<div class="concept-card" id="malleable-software">
+    <div class="concept-header">
+        <h3 class="concept-title">Malleable Software</h3>
+        <span class="tag tag-philosophy">Philosophy</span>
+    </div>
+    <div class="concept-tldr">
+        You're not renting your tools anymore. You own them—and you can remodel.
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">What Is It?</div>
+        <div class="concept-text">
+            <p>
+                Most software is like renting an apartment: you can move furniture around, but you can't knock down walls.
+                <strong>Malleable software</strong> is like owning your home—you can renovate, expand, and reshape it
+                to fit your life.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Why Should You Care?</div>
+        <div class="concept-text">
+            <p>
+                Ever wished an app worked slightly differently? With malleable software, you don't wait for the vendor's
+                roadmap—you (or an AI) just change it. This is the endgame of the "agent-native" movement.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Who Explains It Best</div>
+        <div class="concept-text">
+            <a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=17995s" target="_blank" class="speaker-ref">
+                Geoffrey Litt <span class="timestamp">4:59:55</span>
+            </a>
+            <a href="#geoffrey-litt" class="speaker-ref">
+                Full profile →
+            </a>
+        </div>
+    </div>
+
+    <div class="related-links">
+        <span style="font-size: 0.75rem; color: var(--text-muted); margin-right: 8px;">Related:</span>
+        <a href="#agent-native" class="related-link concept-link">Agent-Native Software</a>
+        <a href="#delete-code" class="related-link concept-link">Delete Code Mindset</a>
+    </div>
+</div>
+
+<!-- Concept 5: MCP -->
+<div class="concept-card" id="mcp">
+    <div class="concept-header">
+        <h3 class="concept-title">MCP (Model Context Protocol)</h3>
+        <span class="tag tag-tools">Tools</span>
+    </div>
+    <div class="concept-tldr">
+        A universal plug for connecting AI to tools. Like USB-C, but for agents.
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">What Is It?</div>
+        <div class="concept-text">
+            <p>
+                MCP is a standard way for AI models to connect to external tools and knowledge. Instead of copy-pasting
+                documentation into a chat window, the AI can query your docs, repos, or databases directly.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Why Should You Care?</div>
+        <div class="concept-text">
+            <p>
+                If you've ever spent 10 minutes explaining context to an AI, MCP fixes that. Your AI can look things
+                up itself—reliably and repeatedly. It's the difference between hiring someone who needs constant
+                hand-holding vs. someone who can find their own answers.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Who Explains It Best</div>
+        <div class="concept-text">
+            <a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=14530s" target="_blank" class="speaker-ref">
+                CJ Hess <span class="timestamp">4:02:10</span>
+            </a>
+            <a href="#cj-hess" class="speaker-ref">
+                Full profile →
+            </a>
+        </div>
+    </div>
+
+    <div class="related-links">
+        <span style="font-size: 0.75rem; color: var(--text-muted); margin-right: 8px;">Related:</span>
+        <a href="#agent-native" class="related-link concept-link">Agent-Native Software</a>
+        <a href="#multi-model" class="related-link concept-link">Multi-Model Teams</a>
+    </div>
+</div>
+
+<!-- Concept 6: Multi-Model Orchestration -->
+<div class="concept-card" id="multi-model">
+    <div class="concept-header">
+        <h3 class="concept-title">Multi-Model Teams</h3>
+        <span class="tag tag-agents">Agents</span>
+    </div>
+    <div class="concept-tldr">
+        One AI plans, another executes. Like an engineering manager and a coder.
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">What Is It?</div>
+        <div class="concept-text">
+            <p>
+                Instead of asking one AI to do everything, you set up a team: one model acts as the
+                <strong>engineering manager</strong> (planning, reviewing, deciding) while another acts as the
+                <strong>implementer</strong> (writing code, executing tasks).
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Why Should You Care?</div>
+        <div class="concept-text">
+            <p>
+                This mirrors how real teams work—and it turns out AI teams work better this way too. The "manager"
+                can catch mistakes, maintain context, and decide when something's actually done. The "implementer"
+                can focus on execution.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Who Explains It Best</div>
+        <div class="concept-text">
+            <a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=9023s" target="_blank" class="speaker-ref">
+                Nat Eliason <span class="timestamp">2:30:23</span>
+            </a>
+            <a href="#nat-eliason" class="speaker-ref">
+                Full profile →
+            </a>
+        </div>
+    </div>
+
+    <div class="related-links">
+        <span style="font-size: 0.75rem; color: var(--text-muted); margin-right: 8px;">Related:</span>
+        <a href="#compound-engineering" class="related-link concept-link">Compound Engineering</a>
+        <a href="#agent-native" class="related-link concept-link">Agent-Native Software</a>
+    </div>
+</div>
+
+<!-- Concept 7: Delete Code Mindset -->
+<div class="concept-card" id="delete-code">
+    <div class="concept-header">
+        <h3 class="concept-title">Delete Code Mindset</h3>
+        <span class="tag tag-philosophy">Philosophy</span>
+    </div>
+    <div class="concept-tldr">
+        Your advantage isn't code volume. It's taste, direction, and iteration speed.
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">What Is It?</div>
+        <div class="concept-text">
+            <p>
+                As AI gets better at writing code, the competitive advantage shifts. It's no longer "who can write
+                more code"—it's "who knows what to build, and how to steer." You might actually <strong>delete more
+                code</strong> as you go, re-architecting frequently.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Why Should You Care?</div>
+        <div class="concept-text">
+            <p>
+                If you're not a programmer, this is actually good news: the barrier to building software is dropping fast.
+                If you are a programmer, the value shifts toward judgment, taste, and understanding what users actually need.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Who Discusses This</div>
+        <div class="concept-text">
+            <a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=19791s" target="_blank" class="speaker-ref">
+                Kevin Rose & Kieran <span class="timestamp">5:29:51</span>
+            </a>
+            <a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=10969s" target="_blank" class="speaker-ref">
+                Tina He <span class="timestamp">3:02:49</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="related-links">
+        <span style="font-size: 0.75rem; color: var(--text-muted); margin-right: 8px;">Related:</span>
+        <a href="#compound-engineering" class="related-link concept-link">Compound Engineering</a>
+        <a href="#malleable-software" class="related-link concept-link">Malleable Software</a>
+    </div>
+</div>
+
+<!-- Concept 8: Reverse Engineering -->
+<div class="concept-card" id="reverse-engineering">
+    <div class="concept-header">
+        <h3 class="concept-title">Learn by Taking Apart</h3>
+        <span class="tag tag-workflow">Workflow</span>
+    </div>
+    <div class="concept-tldr">
+        Don't reinvent. Disassemble great products and rebuild with the same tricks.
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">What Is It?</div>
+        <div class="concept-text">
+            <p>
+                Instead of designing from scratch, study products you admire. Take them apart to understand their
+                patterns—the flows, affordances, feedback loops. Then rebuild those patterns in your own work.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Why Should You Care?</div>
+        <div class="concept-text">
+            <p>
+                This is how you learn faster. Great products aren't magic—they're patterns that work. Once you can
+                see the patterns, you can apply them anywhere. And AI is great at helping you analyze and reproduce patterns.
+            </p>
+        </div>
+    </div>
+
+    <div class="concept-section">
+        <div class="concept-label">Who Explains It Best</div>
+        <div class="concept-text">
+            <a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=25178s" target="_blank" class="speaker-ref">
+                Yash Poojary <span class="timestamp">6:59:38</span>
+            </a>
+            <a href="#yash-poojary" class="speaker-ref">
+                Full profile →
+            </a>
+        </div>
+    </div>
+
+    <div class="related-links">
+        <span style="font-size: 0.75rem; color: var(--text-muted); margin-right: 8px;">Related:</span>
+        <a href="#compound-engineering" class="related-link concept-link">Compound Engineering</a>
+        <a href="#delete-code" class="related-link concept-link">Delete Code Mindset</a>
+    </div>
+</div>
+
+<h2 id="speakers">Speaker Profiles</h2>
+<p>Meet the 17 speakers from the event. Each profile includes timestamps, topics, and key insights.</p>
+
+<hr>
+
+<h2 id="dan-shipper">Dan Shipper</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Dan Shipper</h3>
+            <span class="speaker-org">Every CEO</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=3s" target="_blank">0:00:03</a></span>
+    </div>
+    <p class="speaker-topic">Introduction & Proof/Anecdote - Agent-native markdown editor demo</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-agents">Agent-Native</span>
+        <span class="tag tag-tools">Proof Editor</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Introduces Every's three pillars: Ideas, Apps, and Training</li>
+        <li>Demos Proof - an agent-native markdown editor built for humans and agents</li>
+        <li>Shows track changes, human vs AI attribution, and Every's style guide review</li>
+        <li>"This is a project that should have taken a group of engineers six months... I just vibe coded it in my spare time and have absolutely no idea how any of the code works."</li>
+        <li>Explains what agent-native apps are and points to Every's guide</li>
+    </ul>
+</div>
+
+<h2 id="ben-tossell">Ben Tossell</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Ben Tossell</h3>
+            <span class="speaker-org">Ben's Bites / Factory</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=1883s" target="_blank">0:31:23</a></span>
+    </div>
+    <p class="speaker-topic">Non-technical builder sharing agent sessions</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-nontechnical">Non-Technical</span>
+        <span class="tag tag-agents">Agent Sessions</span>
+        <span class="tag tag-workflow">Session Sharing</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>"I can't code, still can't. I've tried and just couldn't get it to work for me."</li>
+        <li>Built and sold MakerPad (no-code education) to Zapier</li>
+        <li>Demos a session reviewer tool that exports terminal sessions to a visual UI</li>
+        <li>Shows one-shot building — "10 minutes ago I built this popup for today's demo"</li>
+        <li>Strategy: Find other agents' code, adapt it for your needs</li>
+    </ul>
+</div>
+
+<h2 id="ashe-magalhaes">Ashe Magalhaes</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Ashe Magalhaes</h3>
+            <span class="speaker-org">Hearth AI</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=3596s" target="_blank">0:59:56</a></span>
+    </div>
+    <p class="speaker-topic">Building a personal AI suite for relationship context</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-tools">Personal AI</span>
+        <span class="tag tag-agents">Life Context</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Former founder of Hearth AI, focused on relational intelligence</li>
+        <li>Builds a personal Rolodex/journal with notes about people and relationships</li>
+        <li>Prefers high-signal personal context over noisy integrations</li>
+        <li>Builds for personal use first, then considers sharing it on GitHub</li>
+    </ul>
+</div>
+
+<h2 id="ryan-carson">Ryan Carson</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Ryan Carson</h3>
+            <span class="speaker-org">Founder, Untangle</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=5404s" target="_blank">1:30:04</a></span>
+    </div>
+    <p class="speaker-topic">AMP infinite loop agent that never stops working</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-agents">Infinite Loop</span>
+        <span class="tag tag-workflow">Compound Product</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Former builder in residence at AMP</li>
+        <li>Introduces "Compound Product" - autonomous product improvement loops</li>
+        <li>"We all feel stressed because we can't loop our agents 24/7"</li>
+        <li>Open source repo for infinite loop agent patterns</li>
+        <li>Works across AMP, Claude Code, Cursor, or other agentic tools</li>
+    </ul>
+</div>
+
+<h2 id="natalia-nityesh">Natalia Quintero & Nityesh Agarwal</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Natalia Quintero & Nityesh Agarwal</h3>
+            <span class="speaker-org">Every Consulting</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=7201s" target="_blank">2:00:01</a></span>
+    </div>
+    <p class="speaker-topic">AI consulting workflows for deck creation and synthesis</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-workflow">Consulting</span>
+        <span class="tag tag-tools">Automation</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Demos a deck Claude generated from rough inputs</li>
+        <li>Uses AI to outline slides and draft copy for v1 decks</li>
+        <li>Reduces deck turnaround from days/weeks to a few hours</li>
+        <li>Frees time to focus on client needs and design refinement</li>
+    </ul>
+</div>
+
+<h2 id="katie-parrott">Katie Parrott</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Katie Parrott</h3>
+            <span class="speaker-org">Every Editorial</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=8030s" target="_blank">2:13:50</a></span>
+    </div>
+    <p class="speaker-topic">Claude Code for editorial workflows and writing ops</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-philosophy">Writing</span>
+        <span class="tag tag-workflow">Collaboration</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Staff writer and AI editorial lead at Every</li>
+        <li>Demos Claude Code in the cloud app plus the Compound Engineering plugin</li>
+        <li>Revisits an editorial ops project and runs codebase reviews/audits</li>
+        <li>Goal: one app to manage editorial feedback and production workflows</li>
+    </ul>
+</div>
+
+<h2 id="nat-eliason">Nat Eliason</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Nat Eliason</h3>
+            <span class="speaker-org">Author</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=9023s" target="_blank">2:30:23</a></span>
+    </div>
+    <p class="speaker-topic">ClaudeBot: The Mac Mini agent running 24/7 unsupervised</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-agents">24/7 Agent</span>
+        <span class="tag tag-tools">Mac Mini</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Started vibe coding with Cursor in early 2024</li>
+        <li>"The one thing Claude can't do is give me a haircut"</li>
+        <li>Runs Claude Code on dedicated Mac Mini 24/7</li>
+        <li>Journey from skeptic to full believer in agentic coding</li>
+        <li>Systems for managing always-on AI agents</li>
+    </ul>
+</div>
+
+<h2 id="tina-he">Tina He</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Tina He</h3>
+            <span class="speaker-org">Pace Capital</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=10969s" target="_blank">3:02:49</a></span>
+    </div>
+    <p class="speaker-topic">Vibe coding as creative practice — "infinite maze" demo</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-philosophy">Creative Practice</span>
+        <span class="tag tag-tools">Claude Code</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Tinkerer, writer, and investor at Pace Capital; previously built dev tools at Coinbase/Base</li>
+        <li>Emphasizes fun and creativity as the core of vibe coding</li>
+        <li>Demos an "infinite maze" app that rewrites frustrated messages into corporate language</li>
+        <li>Builds with Claude Code + Codex and uses prompts/skills to shape the UI</li>
+    </ul>
+</div>
+
+<h2 id="paula-dozsa">Paula Dozsa</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Paula Dozsa</h3>
+            <span class="speaker-org">Portola</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=12660s" target="_blank">3:31:00</a></span>
+    </div>
+    <p class="speaker-topic">Production iOS features for Tolan with Claude</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-tools">iOS</span>
+        <span class="tag tag-workflow">Production</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>iOS engineer at Portola building Tolan, an AI companion app with hundreds of thousands of users</li>
+        <li>Uses Claude and Opus to ship production features (not just prototypes)</li>
+        <li>Claude handles UI work while she focuses on iOS/Unity integration</li>
+        <li>Shares team workflows: Slack/Linear integrations, Opus/Sonnet review roles, and pre/post hooks</li>
+    </ul>
+</div>
+
+<h2 id="cj-hess">CJ Hess</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">CJ Hess</h3>
+            <span class="speaker-org">Tenex</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=14530s" target="_blank">4:02:10</a></span>
+    </div>
+    <p class="speaker-topic">Flowy: diagram-first planning with JSON for Claude</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-tools">Flowy</span>
+        <span class="tag tag-workflow">Diagram-First</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Built Flowy, a local Figma-like tool that saves flows and mockups as JSON</li>
+        <li>References those JSON diagrams in plans so Claude can iterate on UI and flows</li>
+        <li>Demos adding a quiz feature using the Flowy skill and updated diagrams</li>
+        <li>Prefers skills/CLIs to reduce context bloat; MCPs are helpful but imperfect for design transfer</li>
+    </ul>
+</div>
+
+<h2 id="logan-ammaar">Logan Kilpatrick & Ammaar Reshi</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Logan Kilpatrick & Ammaar Reshi</h3>
+            <span class="speaker-org">Google</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=16301s" target="_blank">4:31:41</a></span>
+    </div>
+    <p class="speaker-topic">The latest from Google AI Studios</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-tools">Google AI</span>
+        <span class="tag tag-tools">Gemini</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Latest developments in Google AI Studio</li>
+        <li>Gemini capabilities and roadmap</li>
+        <li>Google's perspective on the AI development landscape</li>
+        <li>Integration opportunities with Google's AI tools</li>
+    </ul>
+</div>
+
+<h2 id="geoffrey-litt">Geoffrey Litt</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Geoffrey Litt</h3>
+            <span class="speaker-org">Notion</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=17995s" target="_blank">4:59:55</a></span>
+    </div>
+    <p class="speaker-topic">Malleable software - Apps that rewrite themselves</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-philosophy">Malleable Software</span>
+        <span class="tag tag-tools">Notion</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Malleable software paradigm - users can modify their tools</li>
+        <li>Apps that adapt and rewrite themselves</li>
+        <li>Research perspective on end-user programming</li>
+        <li>How Notion thinks about AI-powered customization</li>
+    </ul>
+</div>
+
+<h2 id="kevin-kieran">Kevin Rose & Kieran Klaassen</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Kevin Rose & Kieran Klaassen</h3>
+            <span class="speaker-org">True Ventures / Every</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=19791s" target="_blank">5:29:51</a></span>
+    </div>
+    <p class="speaker-topic">Compound Engineering: Plan, work, review, compound</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-workflow">Compound Engineering</span>
+        <span class="tag tag-philosophy">Methodology</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Compound Engineering methodology: Plan → Work → Review → Compound → Repeat</li>
+        <li>"Each unit of engineering work should make subsequent units easier"</li>
+        <li>Kevin Rose using the Compound Engineering plugin</li>
+        <li>How to build knowledge that compounds over time</li>
+        <li>The plugin that started from Every's internal tooling</li>
+    </ul>
+</div>
+
+<h2 id="thariq-shihipar">Thariq Shihipar</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Thariq Shihipar</h3>
+            <span class="speaker-org">Anthropic</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=21740s" target="_blank">6:02:20</a></span>
+    </div>
+    <p class="speaker-topic">Inside Anthropic: Why tasks will replace to-dos</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-tools">Claude Code</span>
+        <span class="tag tag-philosophy">Anthropic</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Inside perspective from Anthropic</li>
+        <li>The future of tasks vs to-dos in AI-native workflows</li>
+        <li>How Anthropic thinks about Claude Code's evolution</li>
+        <li>The shift from human execution to AI execution</li>
+    </ul>
+</div>
+
+<h2 id="naveen-naidu">Naveen Naidu</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Naveen Naidu</h3>
+            <span class="speaker-org">Every / Monologue</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=23447s" target="_blank">6:30:47</a></span>
+    </div>
+    <p class="speaker-topic">One developer vs VC-backed voice note giants</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-tools">iOS</span>
+        <span class="tag tag-workflow">Solo Dev</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Building Monologue — Every's smart voice-to-text Mac app</li>
+        <li>Solo developer competing with VC-backed startups</li>
+        <li>iOS development workflow with AI assistance</li>
+        <li>Speed and iteration advantages of AI-assisted development</li>
+    </ul>
+</div>
+
+<h2 id="yash-poojary">Yash Poojary</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Yash Poojary</h3>
+            <span class="speaker-org">Every / Sparkle</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=25178s" target="_blank">6:59:38</a></span>
+    </div>
+    <p class="speaker-topic">Reverse engineering ChatGPT and Spotify to learn faster</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-workflow">Learning</span>
+        <span class="tag tag-tools">Reverse Engineering</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Reverse engineering popular apps to understand patterns</li>
+        <li>Learning by deconstructing ChatGPT and Spotify</li>
+        <li>Building Sparkle - Every's file organizer</li>
+        <li>Accelerated learning through AI-assisted analysis</li>
+    </ul>
+</div>
+
+<h2 id="brooker-belcourt">Brooker Belcourt</h2>
+<div class="speaker-card">
+    <div class="speaker-header">
+        <div>
+            <h3 class="speaker-name">Brooker Belcourt</h3>
+            <span class="speaker-org">Every Consulting</span>
+        </div>
+        <span class="speaker-timestamp"><a href="https://www.youtube.com/watch?v=5YBjll9XJlw&t=26976s" target="_blank">7:29:36</a></span>
+    </div>
+    <p class="speaker-topic">Hedge fund research workflows in ~20 minutes with Claude</p>
+    <div style="margin-bottom: 1rem;">
+        <span class="tag tag-workflow">Research</span>
+        <span class="tag tag-tools">Finance</span>
+    </div>
+    <ul class="speaker-highlights">
+        <li>Background in hedge funds and fintech; uses Claude as a research assistant</li>
+        <li>Uses slash commands/plugins to build earnings previews and dashboards</li>
+        <li>Claude accesses files/MCPs and runs code to compile sources</li>
+        <li>Work that took ~5 hours can run in ~20 minutes of compute</li>
+    </ul>
+</div>
+
+<h2 id="resources">Resources</h2>
+
+<h3>Watch & Learn</h3>
+<ul>
+    <li><a href="https://www.youtube.com/watch?v=5YBjll9XJlw" target="_blank">Full Video on YouTube</a> (8 hours)</li>
+    <li><a href="https://every.to/subscribe" target="_blank">Every Subscription</a> - Ideas, apps, and training</li>
+</ul>
+
+<h3>Tools Mentioned</h3>
+<ul>
+    <li><a href="https://docs.anthropic.com/en/docs/build-with-claude/claude-code" target="_blank"><strong>Claude Code</strong></a> - Anthropic's agentic coding CLI</li>
+    <li><a href="https://cursor.sh" target="_blank"><strong>Cursor</strong></a> - AI-first code editor</li>
+    <li><a href="https://ampcode.com" target="_blank"><strong>AMP</strong></a> - Agentic development platform by Sourcegraph</li>
+    <li><a href="https://modelcontextprotocol.io" target="_blank"><strong>MCP</strong></a> - Model Context Protocol for tool access</li>
+    <li><a href="https://context7.com" target="_blank"><strong>Context7</strong></a> - MCP server for framework documentation</li>
+    <li><strong>Flowy</strong> - Diagram-first planning tool with JSON mockups</li>
+    <li><strong>Compound Engineering Plugin</strong> - Every's workflow methodology</li>
+</ul>
+
+<h3>Every Apps</h3>
+<ul>
+    <li><strong>Proof</strong> - Agent-native markdown editor</li>
+    <li><strong>Cora</strong> - AI email assistant</li>
+    <li><strong>Monologue</strong> - Smart dictation app</li>
+    <li><strong>Spiral</strong> - AI ghostwriter with taste</li>
+    <li><strong>Sparkle</strong> - AI file organizer</li>
+</ul>
+
+<h3>Further Reading</h3>
+<ul>
+    <li><a href="https://every.to/p/the-illustrated-guide-to-building-agent-native-apps" target="_blank">The Illustrated Guide to Building Agent-Native Apps</a></li>
+    <li><a href="https://every.to/chain-of-thought/what-is-compound-engineering" target="_blank">What Is Compound Engineering?</a></li>
+    <li><a href="https://www.geoffreylitt.com/2023/03/25/llm-end-user-programming.html" target="_blank">Geoffrey Litt on Malleable Software</a></li>
+    <li><a href="https://github.com/EveryInc/vibe-code-camp" target="_blank">Vibe Code Camp GitHub Repo</a></li>
+</ul>
+
+<div class="callout callout-purple">
+    <p><strong>Built something with this transcript?</strong> Tag <a href="https://twitter.com/Every" target="_blank">@Every</a> on X.</p>
+</div>
+
+<p class="footer">This resource page documents the Vibe Code Camp livestream from Every. For updates, see <a href="https://every.to">every.to</a>.</p>
+
+</div><!-- end main-content -->
+
+<!-- Floating Action Buttons -->
+<div id="floating-actions">
+    <button id="toc-toggle" class="fab" aria-label="Toggle sidebar" title="Toggle Sidebar (T)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    <button id="back-to-top" class="fab fab-secondary" aria-label="Back to top" title="Back to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+    <button id="search-button" class="fab fab-search" aria-label="Search document" title="Search (Cmd+K)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+        </svg>
+    </button>
+    <button id="slideshow-toggle" class="fab fab-slideshow" aria-label="Toggle slideshow mode" title="Slideshow Mode (S)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+    </button>
+</div>
+
+<!-- Slideshow Navigation -->
+<div id="slideshow-nav" class="slideshow-hidden">
+    <button id="slide-prev" class="slide-nav-btn" aria-label="Previous slide">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </button>
+    <div id="slide-dots" class="slide-dots"></div>
+    <button id="slide-next" class="slide-nav-btn" aria-label="Next slide">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+    </button>
+    <div id="slide-counter" class="slide-counter"></div>
+</div>
+
+<!-- Search Modal -->
+<div id="search-modal" class="modal-hidden">
+    <div class="search-backdrop"></div>
+    <div class="search-content">
+        <div class="search-input-wrapper">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" id="search-input" placeholder="Search speakers, topics, tools..." aria-label="Search">
+            <button id="search-close" aria-label="Close search">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div id="search-results" class="search-results">
+            <div class="search-empty">
+                <p>Search for speakers, topics, or tools</p>
+            </div>
+        </div>
+        <div class="search-hint">
+            <span><kbd>↑</kbd> <kbd>↓</kbd> Navigate</span>
+            <span><kbd>Enter</kbd> Select</span>
+            <span><kbd>Esc</kbd> Close</span>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================================
+// Scroll Tracking
+// ============================================================================
+
+const tocNav = document.getElementById('toc-nav');
+let currentActiveId = null;
+
+function updateActiveSection() {
+    // Track both H2 sections and concept cards
+    const sections = Array.from(document.querySelectorAll('h2[id], .concept-card[id]'));
+    if (sections.length === 0) return;
+
+    let newActiveId = null;
+
+    for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 200) {
+            newActiveId = section.id;
+            break;
+        }
+    }
+
+    if (!newActiveId) {
+        newActiveId = sections[0].id;
+    }
+
+    if (newActiveId !== currentActiveId) {
+        currentActiveId = newActiveId;
+        tocNav.querySelectorAll('a').forEach(link => link.classList.remove('active'));
+        const activeLink = tocNav.querySelector(`a[data-id="${currentActiveId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+            activeLink.scrollIntoView({ block: 'nearest' });
+        }
+    }
+}
+
+function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('reading-progress').style.width = `${progress}%`;
+}
+
+function updateBackToTop() {
+    const btn = document.getElementById('back-to-top');
+    if (window.scrollY > 300) {
+        btn.classList.add('visible');
+    } else {
+        btn.classList.remove('visible');
+    }
+}
+
+// ============================================================================
+// Search
+// ============================================================================
+
+const searchModal = document.getElementById('search-modal');
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+let searchData = [];
+let selectedResultIndex = -1;
+
+function buildSearchIndex() {
+    searchData = [];
+
+    // Index concept cards
+    const conceptCards = document.querySelectorAll('.concept-card[id]');
+    conceptCards.forEach(card => {
+        const title = card.querySelector('.concept-title')?.textContent || '';
+        const tldr = card.querySelector('.concept-tldr')?.textContent || '';
+        const sections = Array.from(card.querySelectorAll('.concept-text'))
+            .map(el => el.textContent).join(' ');
+        const tags = Array.from(card.querySelectorAll('.tag'))
+            .map(t => t.textContent).join(' ');
+
+        searchData.push({
+            id: card.id,
+            title: title,
+            org: 'Concept',
+            content: `${tldr} ${sections} ${tags}`.trim().slice(0, 500)
+        });
+    });
+
+    // Index speaker cards
+    const speakerCards = document.querySelectorAll('.speaker-card');
+    speakerCards.forEach(card => {
+        // Find the h2 before this card
+        let currentEl = card.previousElementSibling;
+        while (currentEl && currentEl.tagName !== 'H2') {
+            currentEl = currentEl.previousElementSibling;
+        }
+
+        if (currentEl && currentEl.id) {
+            const name = card.querySelector('.speaker-name')?.textContent || '';
+            const org = card.querySelector('.speaker-org')?.textContent || '';
+            const topic = card.querySelector('.speaker-topic')?.textContent || '';
+            const highlights = Array.from(card.querySelectorAll('.speaker-highlights li'))
+                .map(li => li.textContent).join(' ');
+            const tags = Array.from(card.querySelectorAll('.tag'))
+                .map(t => t.textContent).join(' ');
+
+            searchData.push({
+                id: currentEl.id,
+                title: name,
+                org: org,
+                content: `${topic} ${highlights} ${tags}`.trim()
+            });
+        }
+    });
+
+    // Add other sections (Overview, Resources, Pathways, etc.)
+    document.querySelectorAll('h2[id]').forEach(h2 => {
+        if (!searchData.find(d => d.id === h2.id)) {
+            let content = '';
+            let sibling = h2.nextElementSibling;
+            while (sibling && sibling.tagName !== 'H2') {
+                content += sibling.textContent + ' ';
+                sibling = sibling.nextElementSibling;
+            }
+            searchData.push({
+                id: h2.id,
+                title: h2.textContent,
+                org: '',
+                content: content.trim().slice(0, 500)
+            });
+        }
+    });
+}
+
+function searchDocument(query) {
+    if (!query.trim()) return [];
+    const lowerQuery = query.toLowerCase();
+
+    return searchData
+        .map(item => {
+            const titleMatch = item.title.toLowerCase().includes(lowerQuery);
+            const orgMatch = item.org.toLowerCase().includes(lowerQuery);
+            const contentMatch = item.content.toLowerCase().includes(lowerQuery);
+
+            if (!titleMatch && !orgMatch && !contentMatch) return null;
+
+            let preview = item.content.slice(0, 120);
+            const contentIndex = item.content.toLowerCase().indexOf(lowerQuery);
+            if (contentIndex > 40) {
+                preview = '...' + item.content.slice(contentIndex - 20, contentIndex + 100);
+            }
+
+            return {
+                ...item,
+                preview,
+                score: titleMatch ? 3 : (orgMatch ? 2 : 1)
+            };
+        })
+        .filter(Boolean)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 12);
+}
+
+function highlightMatch(text, query) {
+    if (!query.trim()) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+}
+
+function renderSearchResults(results, query) {
+    if (results.length === 0) {
+        searchResults.innerHTML = `<div class="search-empty"><p>No results for "${query}"</p></div>`;
+        return;
+    }
+
+    selectedResultIndex = 0;
+    searchResults.innerHTML = results.map((result, index) => `
+        <div class="search-result${index === 0 ? ' selected' : ''}" data-id="${result.id}">
+            <div class="search-result-title">${highlightMatch(result.title, query)}${result.org ? ` <span style="color: var(--accent-teal); font-weight: normal;">${result.org}</span>` : ''}</div>
+            <div class="search-result-preview">${highlightMatch(result.preview, query)}...</div>
+        </div>
+    `).join('');
+
+    searchResults.querySelectorAll('.search-result').forEach((el, index) => {
+        el.addEventListener('click', () => navigateToResult(results[index].id));
+    });
+}
+
+function navigateToResult(id) {
+    closeSearch();
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ block: 'start' });
+    }
+}
+
+function openSearch() {
+    searchModal.classList.remove('modal-hidden');
+    searchInput.value = '';
+    searchInput.focus();
+    searchResults.innerHTML = '<div class="search-empty"><p>Search for speakers, topics, or tools</p></div>';
+    selectedResultIndex = -1;
+}
+
+function closeSearch() {
+    searchModal.classList.add('modal-hidden');
+}
+
+// ============================================================================
+// TOC Filter
+// ============================================================================
+
+function filterTOC(query) {
+    const items = tocNav.querySelectorAll('.toc-section');
+    const lowerQuery = query.toLowerCase();
+
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = (lowerQuery === '' || text.includes(lowerQuery)) ? '' : 'none';
+    });
+}
+
+// ============================================================================
+// Event Listeners
+// ============================================================================
+
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    if (scrollTimeout) cancelAnimationFrame(scrollTimeout);
+    scrollTimeout = requestAnimationFrame(() => {
+        updateActiveSection();
+        updateProgress();
+        updateBackToTop();
+    });
+});
+
+document.getElementById('toc-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('toc-hidden');
+});
+
+document.getElementById('back-to-top').addEventListener('click', () => {
+    window.scrollTo(0, 0);
+});
+
+document.getElementById('search-button').addEventListener('click', openSearch);
+document.getElementById('search-close').addEventListener('click', closeSearch);
+document.querySelector('.search-backdrop').addEventListener('click', closeSearch);
+
+searchInput.addEventListener('input', (e) => {
+    const results = searchDocument(e.target.value);
+    renderSearchResults(results, e.target.value);
+});
+
+searchInput.addEventListener('keydown', (e) => {
+    const results = searchResults.querySelectorAll('.search-result');
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (selectedResultIndex < results.length - 1) {
+            selectedResultIndex++;
+            results.forEach(r => r.classList.remove('selected'));
+            results[selectedResultIndex]?.classList.add('selected');
+            results[selectedResultIndex]?.scrollIntoView({ block: 'nearest' });
+        }
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (selectedResultIndex > 0) {
+            selectedResultIndex--;
+            results.forEach(r => r.classList.remove('selected'));
+            results[selectedResultIndex]?.classList.add('selected');
+            results[selectedResultIndex]?.scrollIntoView({ block: 'nearest' });
+        }
+    } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const selected = results[selectedResultIndex];
+        if (selected) navigateToResult(selected.dataset.id);
+    } else if (e.key === 'Escape') {
+        closeSearch();
+    }
+});
+
+document.getElementById('toc-filter').addEventListener('input', (e) => {
+    filterTOC(e.target.value);
+});
+
+document.addEventListener('keydown', (e) => {
+    // Handle slideshow keyboard navigation first
+    if (handleSlideshowKeydown(e)) {
+        return;
+    }
+
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        openSearch();
+    }
+
+    // S key to toggle slideshow mode
+    if (e.key === 's' || e.key === 'S') {
+        if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+            e.preventDefault();
+            toggleSlideshowMode();
+        }
+    }
+
+    // T key to toggle TOC (only when not in slideshow mode)
+    if (e.key === 't' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) && !isSlideshowMode) {
+        document.body.classList.toggle('toc-hidden');
+    }
+
+    if (e.key === 'Escape' && !searchModal.classList.contains('modal-hidden')) {
+        closeSearch();
+    }
+});
+
+tocNav.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') {
+        e.preventDefault();
+        const id = e.target.getAttribute('data-id');
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ block: 'start' });
+        }
+    }
+});
+
+// ============================================================================
+// Slideshow Mode
+// ============================================================================
+
+const mainContent = document.querySelector('.main-content');
+const slideshowToggle = document.getElementById('slideshow-toggle');
+const slideshowNav = document.getElementById('slideshow-nav');
+const slidePrev = document.getElementById('slide-prev');
+const slideNext = document.getElementById('slide-next');
+const slideDots = document.getElementById('slide-dots');
+const slideCounter = document.getElementById('slide-counter');
+
+let slideSections = [];
+let currentSlideIndex = 0;
+let isSlideshowMode = false;
+let scrollPositionBeforeSlideshow = 0;
+
+// Wrap content between H2s into section elements
+function wrapSections() {
+    if (slideSections.length > 0) return; // Already wrapped
+
+    const h2s = mainContent.querySelectorAll('h2');
+    if (h2s.length === 0) return;
+
+    h2s.forEach((h2, index) => {
+        const section = document.createElement('div');
+        section.className = 'slide-section';
+        section.dataset.slideIndex = index;
+
+        // Collect all elements from this H2 until the next H2 (or end)
+        const elementsToWrap = [h2];
+        let sibling = h2.nextElementSibling;
+
+        while (sibling && sibling.tagName !== 'H2') {
+            elementsToWrap.push(sibling);
+            sibling = sibling.nextElementSibling;
+        }
+
+        // Insert section before the h2
+        h2.parentNode.insertBefore(section, h2);
+
+        // Move elements into section
+        elementsToWrap.forEach(el => section.appendChild(el));
+
+        slideSections.push(section);
+    });
+
+    renderSlideDots();
+}
+
+// Render dot indicators
+function renderSlideDots() {
+    slideDots.innerHTML = '';
+    slideSections.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.className = 'slide-dot' + (index === currentSlideIndex ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        dot.addEventListener('click', () => goToSlide(index));
+        slideDots.appendChild(dot);
+    });
+    updateSlideCounter();
+}
+
+// Update slide counter text
+function updateSlideCounter() {
+    slideCounter.textContent = `${currentSlideIndex + 1} / ${slideSections.length}`;
+}
+
+// Go to specific slide
+function goToSlide(index) {
+    if (index < 0 || index >= slideSections.length) return;
+
+    currentSlideIndex = index;
+
+    // Update section classes
+    slideSections.forEach((section, i) => {
+        section.classList.remove('active', 'prev');
+        if (i === currentSlideIndex) {
+            section.classList.add('active');
+        } else if (i < currentSlideIndex) {
+            section.classList.add('prev');
+        }
+    });
+
+    // Update dots
+    const dots = slideDots.querySelectorAll('.slide-dot');
+    dots.forEach(dot => dot.classList.remove('active'));
+    if (dots[currentSlideIndex]) {
+        dots[currentSlideIndex].classList.add('active');
+    }
+
+    // Scroll active dot into view
+    const activeDot = dots[currentSlideIndex];
+    if (activeDot) {
+        activeDot.scrollIntoView({ block: 'nearest', inline: 'center' });
+    }
+
+    updateSlideCounter();
+    updateNavButtons();
+
+    // Reset scroll position in the slide
+    const activeSection = slideSections[currentSlideIndex];
+    if (activeSection) {
+        activeSection.scrollTop = 0;
+    }
+}
+
+// Update prev/next button states
+function updateNavButtons() {
+    slidePrev.disabled = currentSlideIndex === 0;
+    slideNext.disabled = currentSlideIndex === slideSections.length - 1;
+}
+
+// Navigate to previous slide
+function prevSlide() {
+    if (currentSlideIndex > 0) {
+        goToSlide(currentSlideIndex - 1);
+    }
+}
+
+// Navigate to next slide
+function nextSlide() {
+    if (currentSlideIndex < slideSections.length - 1) {
+        goToSlide(currentSlideIndex + 1);
+    }
+}
+
+// Find which slide corresponds to current scroll position
+function findSlideFromScrollPosition() {
+    const scrollTop = window.scrollY;
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+
+    slideSections.forEach((section, index) => {
+        const h2 = section.querySelector('h2');
+        if (h2) {
+            const rect = h2.getBoundingClientRect();
+            const distance = Math.abs(rect.top);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestIndex = index;
+            }
+        }
+    });
+
+    return closestIndex;
+}
+
+// Toggle slideshow mode
+function toggleSlideshowMode() {
+    isSlideshowMode = !isSlideshowMode;
+
+    if (isSlideshowMode) {
+        // Entering slideshow mode
+        scrollPositionBeforeSlideshow = window.scrollY;
+        wrapSections();
+
+        // Find current section based on scroll position
+        const slideIndex = findSlideFromScrollPosition();
+
+        document.body.classList.add('slideshow-mode');
+        slideshowNav.classList.remove('slideshow-hidden');
+        slideshowToggle.classList.add('active');
+
+        goToSlide(slideIndex);
+    } else {
+        // Exiting slideshow mode
+        document.body.classList.remove('slideshow-mode');
+        slideshowNav.classList.add('slideshow-hidden');
+        slideshowToggle.classList.remove('active');
+
+        // Remove active/prev classes from sections
+        slideSections.forEach(section => {
+            section.classList.remove('active', 'prev');
+        });
+
+        // Scroll to the section we were viewing
+        const targetSection = slideSections[currentSlideIndex];
+        if (targetSection) {
+            const h2 = targetSection.querySelector('h2');
+            if (h2) {
+                setTimeout(() => {
+                    h2.scrollIntoView({ block: 'start' });
+                }, 50);
+            }
+        }
+    }
+}
+
+// Touch/swipe support
+let touchStartX = 0;
+let touchStartY = 0;
+
+function handleTouchStart(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+}
+
+function handleTouchEnd(e) {
+    if (!isSlideshowMode) return;
+
+    const touchEndX = e.changedTouches[0].screenX;
+    const touchEndY = e.changedTouches[0].screenY;
+
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+
+    // Only trigger if horizontal swipe is dominant and significant
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        if (deltaX > 0) {
+            prevSlide();
+        } else {
+            nextSlide();
+        }
+    }
+}
+
+// Slideshow keyboard navigation
+function handleSlideshowKeydown(e) {
+    if (!isSlideshowMode) return false;
+
+    // Don't capture if in an input
+    if (document.activeElement.tagName === 'INPUT') return false;
+
+    switch (e.key) {
+        case 'ArrowLeft':
+            e.preventDefault();
+            prevSlide();
+            return true;
+        case 'ArrowRight':
+            e.preventDefault();
+            nextSlide();
+            return true;
+        case 'Home':
+            e.preventDefault();
+            goToSlide(0);
+            return true;
+        case 'End':
+            e.preventDefault();
+            goToSlide(slideSections.length - 1);
+            return true;
+        case 'Escape':
+            e.preventDefault();
+            toggleSlideshowMode();
+            return true;
+    }
+    return false;
+}
+
+// Initialize slideshow event listeners
+function initSlideshow() {
+    if (!slideshowToggle) return;
+
+    slideshowToggle.addEventListener('click', toggleSlideshowMode);
+    slidePrev.addEventListener('click', prevSlide);
+    slideNext.addEventListener('click', nextSlide);
+
+    // Touch events
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+}
+
+// ============================================================================
+// Initialize
+// ============================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    buildSearchIndex();
+    updateActiveSection();
+    updateProgress();
+    initSlideshow();
+    if (window.innerWidth <= 1024) {
+        document.body.classList.add('toc-hidden');
+    }
+});
+</script>
+
+</body>
+</html>

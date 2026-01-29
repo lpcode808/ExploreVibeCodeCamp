@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Code Camp - Card Table Explorer</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-card: #0f0f23;
+            --bg-surface: #1f1f3a;
+            --text-primary: #eaeaea;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            /* RPG World Colors */
+            --world-vibe: #70d080;
+            --world-agent: #ff6040;
+            --world-research: #40c0ff;
+            --world-builder: #d0a040;
+            --world-consulting: #8080c0;
+            /* Legacy aliases for compatibility */
+            --accent-coral: var(--world-agent);
+            --accent-teal: var(--world-research);
+            --accent-green: var(--world-vibe);
+            --accent-purple: var(--world-consulting);
+            --accent-blue: var(--world-builder);
+            --border: #2a2a4a;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --font-body: 'Segoe UI', -apple-system, sans-serif;
+            --font-mono: 'SF Mono', 'Monaco', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header / Mode Switcher */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .mode-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .mode-tab {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .mode-tab:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .mode-tab.active {
+            background: var(--accent-coral);
+            color: #fff;
+        }
+
+        .mode-tab kbd {
+            display: inline-block;
+            padding: 2px 6px;
+            margin-left: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .filter-chip {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--accent-teal);
+            color: #fff;
+        }
+
+        .filter-chip.active {
+            background: var(--accent-teal);
+            border-color: var(--accent-teal);
+            color: #fff;
+        }
+
+        .filter-chip[data-world="vibe"].active { background: var(--world-vibe); border-color: var(--world-vibe); color: #1a1a2e; }
+        .filter-chip[data-world="agent"].active { background: var(--world-agent); border-color: var(--world-agent); }
+        .filter-chip[data-world="research"].active { background: var(--world-research); border-color: var(--world-research); color: #1a1a2e; }
+        .filter-chip[data-world="builder"].active { background: var(--world-builder); border-color: var(--world-builder); color: #1a1a2e; }
+        .filter-chip[data-world="consulting"].active { background: var(--world-consulting); border-color: var(--world-consulting); }
+
+        /* Main Canvas */
+        .canvas {
+            padding: 24px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Card Base Styles */
+        .speaker-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .speaker-card:hover {
+            border-color: var(--accent-coral);
+            box-shadow: var(--card-shadow);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .card-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .card-org {
+            font-size: 0.75rem;
+            color: var(--accent-teal);
+            margin-top: 2px;
+        }
+
+        .card-timestamp {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background: var(--bg-surface);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .card-topic {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .card-tag {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 600;
+        }
+
+        .card-tag.vibe { background: rgba(112, 208, 128, 0.2); color: var(--world-vibe); }
+        .card-tag.agent { background: rgba(255, 96, 64, 0.2); color: var(--world-agent); }
+        .card-tag.research { background: rgba(64, 192, 255, 0.2); color: var(--world-research); }
+        .card-tag.builder { background: rgba(208, 160, 64, 0.2); color: var(--world-builder); }
+        .card-tag.consulting { background: rgba(128, 128, 192, 0.2); color: var(--world-consulting); }
+
+        .card-highlights {
+            list-style: none;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .card-highlights li {
+            padding-left: 16px;
+            position: relative;
+            margin-bottom: 6px;
+        }
+
+        .card-highlights li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-coral);
+        }
+
+        /* ============================================
+           MODE 1: GRID VIEW
+           ============================================ */
+        .mode-grid .canvas {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+            align-items: start;
+        }
+
+        /* ============================================
+           MODE 2: KANBAN COLUMNS
+           ============================================ */
+        .mode-kanban .canvas {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 24px;
+        }
+
+        .kanban-column {
+            flex: 0 0 300px;
+            background: var(--bg-surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 120px);
+        }
+
+        .kanban-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kanban-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .kanban-title .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .kanban-title .dot.vibe { background: var(--world-vibe); }
+        .kanban-title .dot.agent { background: var(--world-agent); }
+        .kanban-title .dot.research { background: var(--world-research); }
+        .kanban-title .dot.builder { background: var(--world-builder); }
+        .kanban-title .dot.consulting { background: var(--world-consulting); }
+
+        .kanban-count {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            padding: 4px 8px;
+            border-radius: 999px;
+        }
+
+        .kanban-cards {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .kanban-cards::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .kanban-cards::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .mode-kanban .speaker-card {
+            padding: 12px;
+        }
+
+        .mode-kanban .card-highlights {
+            display: none;
+        }
+
+        /* ============================================
+           MODE 3: DECK STACKS
+           ============================================ */
+        .mode-stacks .canvas {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 48px;
+            flex-wrap: wrap;
+            padding-top: 48px;
+        }
+
+        .deck-stack {
+            position: relative;
+            width: 240px;
+            cursor: pointer;
+        }
+
+        .deck-pile {
+            position: relative;
+            height: 180px;
+            perspective: 1000px;
+        }
+
+        .deck-card-stacked {
+            position: absolute;
+            width: 100%;
+            height: 160px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .deck-card-stacked:nth-child(1) { top: 0; left: 0; z-index: 5; }
+        .deck-card-stacked:nth-child(2) { top: 4px; left: 4px; z-index: 4; }
+        .deck-card-stacked:nth-child(3) { top: 8px; left: 8px; z-index: 3; }
+        .deck-card-stacked:nth-child(4) { top: 12px; left: 12px; z-index: 2; }
+        .deck-card-stacked:nth-child(5) { top: 16px; left: 16px; z-index: 1; }
+
+        .deck-stack:hover .deck-card-stacked:nth-child(1) { transform: rotate(-5deg) translateY(-8px); }
+        .deck-stack:hover .deck-card-stacked:nth-child(2) { transform: rotate(-2deg) translateY(-4px); }
+        .deck-stack:hover .deck-card-stacked:nth-child(3) { transform: rotate(2deg); }
+        .deck-stack:hover .deck-card-stacked:nth-child(4) { transform: rotate(4deg) translateY(4px); }
+        .deck-stack:hover .deck-card-stacked:nth-child(5) { transform: rotate(6deg) translateY(8px); }
+
+        .deck-label {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .deck-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .deck-count {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .deck-name.vibe { color: var(--world-vibe); }
+        .deck-name.agent { color: var(--world-agent); }
+        .deck-name.research { color: var(--world-research); }
+        .deck-name.builder { color: var(--world-builder); }
+        .deck-name.consulting { color: var(--world-consulting); }
+
+        /* Expanded Deck Fan */
+        .deck-fan {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 20, 0.95);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .deck-fan.active {
+            display: flex;
+        }
+
+        .deck-fan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .deck-fan-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .deck-fan-close {
+            padding: 8px 16px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .deck-fan-close:hover {
+            border-color: var(--accent-coral);
+        }
+
+        .deck-fan-cards {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 24px 0;
+            flex: 1;
+            align-items: center;
+        }
+
+        .deck-fan-cards .speaker-card {
+            flex: 0 0 320px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* ============================================
+           MODE 4: FLOAT (Freeform Draggable)
+           ============================================ */
+        .mode-float .canvas.float-only {
+            position: relative;
+            min-height: calc(100vh - 80px);
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(224, 122, 95, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(92, 184, 178, 0.08) 0%, transparent 40%),
+                linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .float-card {
+            position: absolute;
+            width: 200px;
+            height: 300px;
+            background: linear-gradient(180deg, var(--bg-card) 0%, #0a0a1a 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: grab;
+            transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+            user-select: none;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .float-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-coral), var(--accent-teal));
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 1;
+        }
+
+        .float-card:hover {
+            border-color: var(--accent-coral);
+            box-shadow: 0 12px 40px rgba(224, 122, 95, 0.3);
+            z-index: 10;
+        }
+
+        .float-card:hover::before {
+            opacity: 1;
+        }
+
+        .float-card.dragging {
+            cursor: grabbing;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            border-color: var(--accent-coral);
+            z-index: 100;
+            opacity: 0.95;
+            transform: scale(1.02);
+        }
+
+        /* Float card pixel art area */
+        .float-art {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .float-art .pixel-icon {
+            width: 64px;
+            height: 64px;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .float-category {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .float-category.vibe { background: var(--world-vibe); }
+        .float-category.agent { background: var(--world-agent); }
+        .float-category.research { background: var(--world-research); }
+        .float-category.builder { background: var(--world-builder); }
+        .float-category.consulting { background: var(--world-consulting); }
+
+        /* Float card content */
+        .float-content {
+            flex: 1;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .float-card .card-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+
+        .float-card .card-org {
+            font-size: 0.7rem;
+            color: var(--accent-teal);
+            margin-bottom: 8px;
+        }
+
+        .float-card .card-topic {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Float card footer */
+        .float-footer {
+            padding: 8px 12px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .float-card .card-tags {
+            display: flex;
+            gap: 4px;
+        }
+
+        .float-card .card-tag {
+            font-size: 0.55rem;
+            padding: 2px 5px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .float-card .card-timestamp {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0;
+            background: none;
+        }
+
+        .float-card .card-timestamp:hover {
+            color: var(--accent-coral);
+        }
+
+        /* Float controls */
+        .float-controls {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            background: var(--bg-surface);
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            z-index: 50;
+        }
+
+        .float-btn {
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .float-btn:hover {
+            border-color: var(--accent-teal);
+            color: #fff;
+        }
+
+        body:not(.mode-float) .float-controls {
+            display: none;
+        }
+
+        /* Hidden state for modes */
+        body:not(.mode-grid) .grid-only,
+        body:not(.mode-kanban) .kanban-only,
+        body:not(.mode-stacks) .stacks-only,
+        body:not(.mode-float) .float-only,
+        body:not(.mode-portrait) .portrait-only,
+        body:not(.mode-list) .list-only {
+            display: none !important;
+        }
+
+        /* ============================================
+           MODE 6: LIST VIEW
+           ============================================ */
+        .mode-list .canvas {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .list-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .list-header {
+            display: grid;
+            grid-template-columns: 56px 1fr 140px 100px 80px;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .list-row {
+            display: grid;
+            grid-template-columns: 56px 1fr 140px 100px 80px;
+            gap: 12px;
+            padding: 12px 16px;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+
+        .list-row:last-child {
+            border-bottom: none;
+        }
+
+        .list-row:hover {
+            background: rgba(224, 122, 95, 0.08);
+        }
+
+        .list-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-surface);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+
+        .list-icon .pixel-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .list-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .list-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .list-topic {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .list-org {
+            font-size: 0.8rem;
+            color: var(--accent-teal);
+        }
+
+        .list-tags {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .list-tag {
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .list-tag.vibe { background: rgba(112, 208, 128, 0.2); color: var(--world-vibe); }
+        .list-tag.agent { background: rgba(255, 96, 64, 0.2); color: var(--world-agent); }
+        .list-tag.research { background: rgba(64, 192, 255, 0.2); color: var(--world-research); }
+        .list-tag.builder { background: rgba(208, 160, 64, 0.2); color: var(--world-builder); }
+        .list-tag.consulting { background: rgba(128, 128, 192, 0.2); color: var(--world-consulting); }
+
+        .list-timestamp {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 4px 8px;
+            background: var(--bg-surface);
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+
+        .list-timestamp:hover {
+            color: var(--accent-coral);
+            background: rgba(224, 122, 95, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .list-header {
+                display: none;
+            }
+            .list-row {
+                grid-template-columns: 48px 1fr;
+                grid-template-rows: auto auto;
+                gap: 8px;
+            }
+            .list-icon {
+                grid-row: span 2;
+                width: 40px;
+                height: 40px;
+            }
+            .list-icon .pixel-icon {
+                width: 28px;
+                height: 28px;
+            }
+            .list-org, .list-tags {
+                display: none;
+            }
+            .list-timestamp {
+                justify-self: start;
+            }
+        }
+
+        /* ============================================
+           MODE 5: PORTRAIT CARDS (Playing Card Style)
+           ============================================ */
+        .mode-portrait .canvas {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+            padding: 32px;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(224, 122, 95, 0.08) 0%, transparent 50%),
+                linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .portrait-card {
+            width: 200px;
+            height: 300px;
+            background: linear-gradient(180deg, var(--bg-card) 0%, #0a0a1a 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .portrait-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-coral);
+            box-shadow: 0 12px 40px rgba(224, 122, 95, 0.3);
+        }
+
+        .portrait-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-coral), var(--accent-teal));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .portrait-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Pixel Art Container */
+        .portrait-art {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portrait-art .pixel-icon {
+            width: 64px;
+            height: 64px;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        /* Category corner badge */
+        .portrait-category {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .portrait-category.vibe { background: var(--world-vibe); }
+        .portrait-category.agent { background: var(--world-agent); }
+        .portrait-category.research { background: var(--world-research); }
+        .portrait-category.builder { background: var(--world-builder); }
+        .portrait-category.consulting { background: var(--world-consulting); }
+
+        /* Card Content */
+        .portrait-content {
+            flex: 1;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .portrait-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+            line-height: 1.2;
+        }
+
+        .portrait-org {
+            font-size: 0.7rem;
+            color: var(--accent-teal);
+            margin-bottom: 8px;
+        }
+
+        .portrait-topic {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Card Footer */
+        .portrait-footer {
+            padding: 8px 12px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .portrait-tags {
+            display: flex;
+            gap: 4px;
+        }
+
+        .portrait-tag {
+            font-size: 0.55rem;
+            padding: 2px 5px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .portrait-tag.vibe { background: rgba(112, 208, 128, 0.25); color: var(--world-vibe); }
+        .portrait-tag.agent { background: rgba(255, 96, 64, 0.25); color: var(--world-agent); }
+        .portrait-tag.research { background: rgba(64, 192, 255, 0.25); color: var(--world-research); }
+        .portrait-tag.builder { background: rgba(208, 160, 64, 0.25); color: var(--world-builder); }
+        .portrait-tag.consulting { background: rgba(128, 128, 192, 0.25); color: var(--world-consulting); }
+
+        .portrait-timestamp {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .portrait-timestamp:hover {
+            color: var(--accent-coral);
+        }
+
+        /* Footer hint */
+        .footer-hint {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            z-index: 50;
+        }
+
+        .footer-hint kbd {
+            display: inline-block;
+            padding: 2px 6px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            margin: 0 4px;
+        }
+    </style>
+</head>
+<body class="mode-grid">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1>Vibe Code Camp Cards</h1>
+            <div class="mode-tabs">
+                <button class="mode-tab active" data-mode="grid">Grid <kbd>1</kbd></button>
+                <button class="mode-tab" data-mode="kanban">Kanban <kbd>2</kbd></button>
+                <button class="mode-tab" data-mode="stacks">Stacks <kbd>3</kbd></button>
+                <button class="mode-tab" data-mode="float">Float <kbd>4</kbd></button>
+                <button class="mode-tab" data-mode="portrait">Cards <kbd>5</kbd></button>
+                <button class="mode-tab" data-mode="list">List <kbd>6</kbd></button>
+            </div>
+        </div>
+        <div class="filter-bar">
+            <span class="filter-label">World:</span>
+            <button class="filter-chip active" data-world="all">All Worlds</button>
+            <button class="filter-chip" data-world="vibe" title="Where creativity flows into code">🎨 Vibe Village</button>
+            <button class="filter-chip" data-world="agent" title="Where machines work while you dream">🤖 Agent Forge</button>
+            <button class="filter-chip" data-world="research" title="Where tomorrow's tools are forged">🔬 Research Spire</button>
+            <button class="filter-chip" data-world="builder" title="Where one builder moves mountains">🔨 Builder's Guild</button>
+            <button class="filter-chip" data-world="consulting" title="Where strategy becomes advantage">📜 Consulting Keep</button>
+        </div>
+    </header>
+
+    <!-- Grid View Canvas -->
+    <main class="canvas grid-only" id="grid-canvas"></main>
+
+    <!-- Kanban View Canvas -->
+    <main class="canvas kanban-only" id="kanban-canvas">
+        <div class="kanban-column" data-world="vibe">
+            <div class="kanban-header">
+                <div class="kanban-title"><span class="dot vibe"></span> 🎨 Vibe Village</div>
+                <span class="kanban-count" id="kanban-count-vibe">0</span>
+            </div>
+            <div class="kanban-cards" id="kanban-vibe"></div>
+        </div>
+        <div class="kanban-column" data-world="agent">
+            <div class="kanban-header">
+                <div class="kanban-title"><span class="dot agent"></span> 🤖 Agent Forge</div>
+                <span class="kanban-count" id="kanban-count-agent">0</span>
+            </div>
+            <div class="kanban-cards" id="kanban-agent"></div>
+        </div>
+        <div class="kanban-column" data-world="research">
+            <div class="kanban-header">
+                <div class="kanban-title"><span class="dot research"></span> 🔬 Research Spire</div>
+                <span class="kanban-count" id="kanban-count-research">0</span>
+            </div>
+            <div class="kanban-cards" id="kanban-research"></div>
+        </div>
+        <div class="kanban-column" data-world="builder">
+            <div class="kanban-header">
+                <div class="kanban-title"><span class="dot builder"></span> 🔨 Builder's Guild</div>
+                <span class="kanban-count" id="kanban-count-builder">0</span>
+            </div>
+            <div class="kanban-cards" id="kanban-builder"></div>
+        </div>
+        <div class="kanban-column" data-world="consulting">
+            <div class="kanban-header">
+                <div class="kanban-title"><span class="dot consulting"></span> 📜 Consulting Keep</div>
+                <span class="kanban-count" id="kanban-count-consulting">0</span>
+            </div>
+            <div class="kanban-cards" id="kanban-consulting"></div>
+        </div>
+    </main>
+
+    <!-- Stacks View Canvas -->
+    <main class="canvas stacks-only" id="stacks-canvas"></main>
+
+    <!-- Float View Canvas -->
+    <main class="canvas float-only" id="float-canvas"></main>
+
+    <!-- Portrait Card View Canvas -->
+    <main class="canvas portrait-only" id="portrait-canvas"></main>
+
+    <!-- List View Canvas -->
+    <main class="canvas list-only" id="list-canvas"></main>
+
+    <!-- Float Controls -->
+    <div class="float-controls">
+        <button class="float-btn" id="float-scatter">Scatter</button>
+        <button class="float-btn" id="float-grid-arrange">Arrange Grid</button>
+        <button class="float-btn" id="float-circle">Circle</button>
+        <button class="float-btn" id="float-by-category">Group by World</button>
+    </div>
+
+    <!-- Deck Fan Overlay -->
+    <div class="deck-fan" id="deck-fan">
+        <div class="deck-fan-header">
+            <h2 class="deck-fan-title" id="deck-fan-title">Deck</h2>
+            <button class="deck-fan-close" id="deck-fan-close">Close (Esc)</button>
+        </div>
+        <div class="deck-fan-cards" id="deck-fan-cards"></div>
+    </div>
+
+    <!-- Footer Hint -->
+    <div class="footer-hint">
+        Press <kbd>1</kbd>-<kbd>6</kbd> to switch views
+    </div>
+
+    <script>
+        // RPG World definitions
+        const WORLDS = {
+            vibe: {
+                name: "Vibe Village",
+                description: "Where creativity flows into code",
+                icon: "🎨",
+                color: "#70d080"
+            },
+            agent: {
+                name: "Agent Forge",
+                description: "Where machines work while you dream",
+                icon: "🤖",
+                color: "#ff6040"
+            },
+            research: {
+                name: "Research Spire",
+                description: "Where tomorrow's tools are forged",
+                icon: "🔬",
+                color: "#40c0ff"
+            },
+            builder: {
+                name: "Builder's Guild",
+                description: "Where one builder moves mountains",
+                icon: "🔨",
+                color: "#d0a040"
+            },
+            consulting: {
+                name: "Consulting Keep",
+                description: "Where strategy becomes advantage",
+                icon: "📜",
+                color: "#8080c0"
+            }
+        };
+
+        // Speaker Data - each speaker belongs to exactly ONE world
+        const speakers = [
+            {
+                id: "dan-shipper",
+                name: "Dan Shipper",
+                org: "Every CEO",
+                timestamp: "0:00:03",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=3s",
+                topic: "Agent-native markdown editor demo with Proof",
+                world: "vibe",
+                highlights: [
+                    "Introduces Every's three pillars: Ideas, Apps, and Training",
+                    "Demos Proof - an agent-native markdown editor",
+                    "\"This project should have taken six months... I just vibe coded it\""
+                ]
+            },
+            {
+                id: "ben-tossell",
+                name: "Ben Tossell",
+                org: "Ben's Bites",
+                timestamp: "0:31:23",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=1883s",
+                topic: "Non-technical builder running 30 AI agents",
+                world: "agent",
+                highlights: [
+                    "\"I can't code, still can't. I've tried and just couldn't get it.\"",
+                    "Built and sold MakerPad to Zapier",
+                    "Runs 30 AI agents autonomously doing real work"
+                ]
+            },
+            {
+                id: "ashe-magalhaes",
+                name: "Ashe Magalhaes",
+                org: "Hearth AI",
+                timestamp: "0:59:56",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=3596s",
+                topic: "Building a personal AI suite for relationship context",
+                world: "agent",
+                highlights: [
+                    "Builds a personal Rolodex/journal with notes about people",
+                    "Training AI on entire life's data",
+                    "The weirdest experiments often lead to the most useful products"
+                ]
+            },
+            {
+                id: "ryan-carson",
+                name: "Ryan Carson",
+                org: "Untangle",
+                timestamp: "1:30:04",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=5404s",
+                topic: "Infinite loop agent that never stops working",
+                world: "agent",
+                highlights: [
+                    "Introduces \"Compound Product\" - autonomous improvement loops",
+                    "\"We all feel stressed because we can't loop our agents 24/7\"",
+                    "Open source repo for infinite loop agent patterns"
+                ]
+            },
+            {
+                id: "natalia-nityesh",
+                name: "Natalia & Nityesh",
+                org: "Every Consulting",
+                timestamp: "2:00:01",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=7201s",
+                topic: "20-hour decks → 2 hours with AI workflows",
+                world: "consulting",
+                highlights: [
+                    "Uses AI to outline slides and draft copy for v1 decks",
+                    "Reduces deck turnaround from days/weeks to hours",
+                    "Most companies need better prompts, not custom AI"
+                ]
+            },
+            {
+                id: "katie-parrott",
+                name: "Katie Parrott",
+                org: "Every Editorial",
+                timestamp: "2:13:50",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=8030s",
+                topic: "Claude as writing partner, not replacement",
+                world: "vibe",
+                highlights: [
+                    "Staff writer and AI editorial lead at Every",
+                    "Claude Code + Compound Engineering plugin for writing",
+                    "Coded 6 apps in a 2-week vibe coding haze!"
+                ]
+            },
+            {
+                id: "nat-eliason",
+                name: "Nat Eliason",
+                org: "Author & Builder",
+                timestamp: "2:30:23",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=9023s",
+                topic: "ClaudeBot: Mac Mini running 24/7",
+                world: "agent",
+                highlights: [
+                    "\"The one thing Claude can't do is give me a haircut\"",
+                    "Runs Claude Code on dedicated Mac Mini 24/7",
+                    "Agents that work for you around the clock"
+                ]
+            },
+            {
+                id: "tina-he",
+                name: "Tina He",
+                org: "Pace Capital",
+                timestamp: "3:02:49",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=10969s",
+                topic: "Vibe coding as creative meditation",
+                world: "vibe",
+                highlights: [
+                    "Emphasizes fun and creativity as the core of vibe coding",
+                    "Demos \"infinite maze\" - rewrites frustrated messages",
+                    "From non-coder to shipping apps daily"
+                ]
+            },
+            {
+                id: "paula-dozsa",
+                name: "Paula Dozsa",
+                org: "Portola",
+                timestamp: "3:31:00",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=12660s",
+                topic: "200K MAU iOS app with zero iOS experience",
+                world: "vibe",
+                highlights: [
+                    "iOS engineer building Tolan with hundreds of thousands of users",
+                    "Uses Claude/Opus to ship production features",
+                    "You don't need years of experience anymore"
+                ]
+            },
+            {
+                id: "cj-hess",
+                name: "CJ Hess",
+                org: "Tenex",
+                timestamp: "4:02:10",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=14530s",
+                topic: "Context7 MCP - live docs for Claude",
+                world: "builder",
+                highlights: [
+                    "Built Context7 MCP that teaches Claude frameworks automatically",
+                    "Pull in live documentation so Claude always has latest context",
+                    "Context is everything - give Claude the right docs"
+                ]
+            },
+            {
+                id: "logan-ammaar",
+                name: "Logan & Ammaar",
+                org: "Google AI Studio",
+                timestamp: "4:31:41",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=16301s",
+                topic: "The latest from Google AI Studios",
+                world: "research",
+                highlights: [
+                    "Latest developments in Google AI Studio",
+                    "Gemini capabilities and roadmap",
+                    "The best time to start building with AI is now"
+                ]
+            },
+            {
+                id: "geoffrey-litt",
+                name: "Geoffrey Litt",
+                org: "Notion",
+                timestamp: "4:59:55",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=17995s",
+                topic: "Malleable software - Apps that rewrite themselves",
+                world: "research",
+                highlights: [
+                    "Malleable software paradigm - users can modify tools",
+                    "Apps that adapt and rewrite themselves",
+                    "We're entering an era of personal software"
+                ]
+            },
+            {
+                id: "kevin-kieran",
+                name: "Kevin Rose & Kieran",
+                org: "True Ventures / Every",
+                timestamp: "5:29:51",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=19791s",
+                topic: "Compound Engineering: Plan, work, review, compound",
+                world: "builder",
+                highlights: [
+                    "Compound Engineering: Plan → Work → Review → Compound",
+                    "\"Each unit of work should make subsequent units easier\"",
+                    "The plugin that started from Every's internal tooling"
+                ]
+            },
+            {
+                id: "thariq-shihipar",
+                name: "Thariq Shihipar",
+                org: "Anthropic",
+                timestamp: "6:02:20",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=21740s",
+                topic: "Why tasks will replace to-dos",
+                world: "research",
+                highlights: [
+                    "Inside perspective from Anthropic",
+                    "Tasks will replace to-dos - AI that completes work",
+                    "The shift from human execution to AI execution"
+                ]
+            },
+            {
+                id: "naveen-naidu",
+                name: "Naveen Naidu",
+                org: "Every / Monologue",
+                timestamp: "6:30:47",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=23447s",
+                topic: "One developer vs VC-backed voice note giants",
+                world: "builder",
+                highlights: [
+                    "Building Monologue — Every's smart voice-to-text app",
+                    "Solo developer competing with VC-backed startups",
+                    "AI hasn't replaced programmers - it's made us 10x more ambitious"
+                ]
+            },
+            {
+                id: "yash-poojary",
+                name: "Yash Poojary",
+                org: "Every / Sparkle",
+                timestamp: "6:59:38",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=25178s",
+                topic: "Reverse engineering ChatGPT and Spotify to learn",
+                world: "builder",
+                highlights: [
+                    "Reverse engineering popular apps to understand patterns",
+                    "Speed is a feature - don't wait for perfect",
+                    "Building Sparkle - Every's file organizer"
+                ]
+            },
+            {
+                id: "brooker-belcourt",
+                name: "Brooker Belcourt",
+                org: "Every Consulting",
+                timestamp: "7:29:36",
+                youtubeUrl: "https://www.youtube.com/watch?v=5YBjll9XJlw&t=26976s",
+                topic: "5-hour hedge fund research in ~20 minutes",
+                world: "consulting",
+                highlights: [
+                    "Background in hedge funds and fintech",
+                    "Claude as incredibly powerful research assistant",
+                    "AI for research is about thinking faster"
+                ]
+            }
+        ];
+
+        // State
+        let currentMode = 'grid';
+        let currentFilter = 'all';
+
+        // DOM Elements
+        const gridCanvas = document.getElementById('grid-canvas');
+        const kanbanCanvas = document.getElementById('kanban-canvas');
+        const stacksCanvas = document.getElementById('stacks-canvas');
+        const floatCanvas = document.getElementById('float-canvas');
+        const portraitCanvas = document.getElementById('portrait-canvas');
+        const listCanvas = document.getElementById('list-canvas');
+        const deckFan = document.getElementById('deck-fan');
+        const deckFanTitle = document.getElementById('deck-fan-title');
+        const deckFanCards = document.getElementById('deck-fan-cards');
+        const deckFanClose = document.getElementById('deck-fan-close');
+
+        // Float mode state
+        let floatCardPositions = {}; // { speakerId: { x, y } }
+        let floatInitialized = false;
+        let dragState = null; // { cardEl, offsetX, offsetY }
+
+        // Create card HTML
+        function createCardHTML(speaker, compact = false) {
+            const world = WORLDS[speaker.world];
+            const worldTag = `<span class="card-tag ${speaker.world}">${world.icon} ${world.name}</span>`;
+
+            const highlightsHTML = compact ? '' : `
+                <ul class="card-highlights">
+                    ${speaker.highlights.map(h => `<li>${h}</li>`).join('')}
+                </ul>
+            `;
+
+            return `
+                <article class="speaker-card" data-id="${speaker.id}" data-world="${speaker.world}">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-name">${speaker.name}</div>
+                            <div class="card-org">${speaker.org}</div>
+                        </div>
+                        <a href="${speaker.youtubeUrl}" target="_blank" class="card-timestamp">${speaker.timestamp}</a>
+                    </div>
+                    <div class="card-topic">${speaker.topic}</div>
+                    <div class="card-tags">${worldTag}</div>
+                    ${highlightsHTML}
+                </article>
+            `;
+        }
+
+        // Render Grid View
+        function renderGrid() {
+            const filtered = currentFilter === 'all'
+                ? speakers
+                : speakers.filter(s => s.world === currentFilter);
+
+            gridCanvas.innerHTML = filtered.map(s => createCardHTML(s)).join('');
+        }
+
+        // Render Kanban View
+        function renderKanban() {
+            const worlds = ['vibe', 'agent', 'research', 'builder', 'consulting'];
+
+            worlds.forEach(worldId => {
+                const column = document.getElementById(`kanban-${worldId}`);
+                const countEl = document.getElementById(`kanban-count-${worldId}`);
+                const filtered = speakers.filter(s => s.world === worldId);
+
+                // Apply additional filter if not "all"
+                const displayed = currentFilter === 'all' || currentFilter === worldId
+                    ? filtered
+                    : [];
+
+                column.innerHTML = displayed.map(s => createCardHTML(s, true)).join('');
+                countEl.textContent = displayed.length;
+            });
+        }
+
+        // Render Stacks View
+        function renderStacks() {
+            const worldIds = ['vibe', 'agent', 'research', 'builder', 'consulting'];
+
+            stacksCanvas.innerHTML = worldIds.map(worldId => {
+                const world = WORLDS[worldId];
+                const cardsInDeck = speakers.filter(s => s.world === worldId);
+                const visibleCards = cardsInDeck.slice(0, 5);
+
+                // Only show if filter matches or is "all"
+                if (currentFilter !== 'all' && currentFilter !== worldId) {
+                    return '';
+                }
+
+                const stackedCards = visibleCards.map((s, i) => `
+                    <div class="deck-card-stacked" style="z-index: ${5 - i};">
+                        <div class="card-name">${s.name}</div>
+                        <div class="card-org">${s.org}</div>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="deck-stack" data-world="${worldId}">
+                        <div class="deck-pile">
+                            ${stackedCards}
+                        </div>
+                        <div class="deck-label">
+                            <div class="deck-name ${worldId}">${world.icon} ${world.name}</div>
+                            <div class="deck-count">${cardsInDeck.length} cards</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Add click handlers for stacks
+            document.querySelectorAll('.deck-stack').forEach(stack => {
+                stack.addEventListener('click', () => {
+                    const worldId = stack.dataset.world;
+                    openDeckFan(worldId);
+                });
+            });
+        }
+
+        // Render Float View
+        function renderFloat() {
+            const filtered = currentFilter === 'all'
+                ? speakers
+                : speakers.filter(s => s.world === currentFilter);
+
+            // Initialize positions if not done (without re-rendering)
+            if (!floatInitialized) {
+                initScatterPositions();
+                floatInitialized = true;
+            }
+
+            // Create cards with portrait style and pixel art
+            floatCanvas.innerHTML = filtered.map(speaker => {
+                const pos = floatCardPositions[speaker.id] || { x: 100, y: 100 };
+                const art = speakerPixelArt[speaker.id] || { icon: "default", svg: '<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="16" y="16" width="32" height="32" fill="#5cb8b2"/></svg>' };
+                const world = WORLDS[speaker.world];
+                const worldTag = `<span class="card-tag ${speaker.world}">${world.icon}</span>`;
+
+                return `
+                    <div class="float-card" data-id="${speaker.id}"
+                         style="left: ${pos.x}px; top: ${pos.y}px;">
+                        <div class="float-art">
+                            ${art.svg}
+                            <span class="float-category ${speaker.world}"></span>
+                        </div>
+                        <div class="float-content">
+                            <div class="card-name">${speaker.name}</div>
+                            <div class="card-org">${speaker.org}</div>
+                            <div class="card-topic">${speaker.topic}</div>
+                        </div>
+                        <div class="float-footer">
+                            <div class="card-tags">${worldTag}</div>
+                            <a href="${speaker.youtubeUrl}" target="_blank" class="card-timestamp">${speaker.timestamp}</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Add drag handlers
+            setupDragHandlers();
+        }
+
+        // Initialize scatter positions (no render)
+        function initScatterPositions() {
+            const canvasWidth = window.innerWidth - 300;
+            const canvasHeight = window.innerHeight - 200;
+
+            speakers.forEach((speaker, i) => {
+                floatCardPositions[speaker.id] = {
+                    x: 50 + Math.random() * canvasWidth,
+                    y: 100 + Math.random() * canvasHeight
+                };
+            });
+        }
+
+        // Scatter cards randomly (button action)
+        function scatterCards() {
+            initScatterPositions();
+            if (currentMode === 'float') renderFloat();
+        }
+
+        // Arrange in grid
+        function arrangeGrid() {
+            const cols = 6;
+            const cardWidth = 200;
+            const cardHeight = 300;
+            const gap = 24;
+            const startX = 40;
+            const startY = 40;
+
+            const filtered = currentFilter === 'all'
+                ? speakers
+                : speakers.filter(s => s.categories.includes(currentFilter));
+
+            filtered.forEach((speaker, i) => {
+                const col = i % cols;
+                const row = Math.floor(i / cols);
+                floatCardPositions[speaker.id] = {
+                    x: startX + col * (cardWidth + gap),
+                    y: startY + row * (cardHeight + gap)
+                };
+            });
+
+            if (currentMode === 'float') renderFloat();
+        }
+
+        // Arrange in circle
+        function arrangeCircle() {
+            const filtered = currentFilter === 'all'
+                ? speakers
+                : speakers.filter(s => s.categories.includes(currentFilter));
+
+            const centerX = (window.innerWidth - 320) / 2;
+            const centerY = (window.innerHeight - 80) / 2;
+            const radius = Math.min(centerX, centerY) - 180;
+
+            filtered.forEach((speaker, i) => {
+                const angle = (i / filtered.length) * Math.PI * 2 - Math.PI / 2;
+                floatCardPositions[speaker.id] = {
+                    x: centerX + Math.cos(angle) * radius - 100,
+                    y: centerY + Math.sin(angle) * radius - 150
+                };
+            });
+
+            if (currentMode === 'float') renderFloat();
+        }
+
+        // Group by world
+        function groupByCategory() {
+            const worldPositions = {
+                vibe: { x: 40, y: 40 },
+                agent: { x: 280, y: 40 },
+                research: { x: 520, y: 40 },
+                builder: { x: 760, y: 40 },
+                consulting: { x: 1000, y: 40 }
+            };
+
+            const worldOffsets = {
+                vibe: 0,
+                agent: 0,
+                research: 0,
+                builder: 0,
+                consulting: 0
+            };
+
+            speakers.forEach(speaker => {
+                const worldId = speaker.world;
+                const basePos = worldPositions[worldId] || { x: 40, y: 40 };
+                const offset = worldOffsets[worldId];
+
+                floatCardPositions[speaker.id] = {
+                    x: basePos.x + (offset % 2) * 20,
+                    y: basePos.y + Math.floor(offset / 1) * 320
+                };
+
+                worldOffsets[worldId]++;
+            });
+
+            if (currentMode === 'float') renderFloat();
+        }
+
+        // Setup drag handlers
+        function setupDragHandlers() {
+            const cards = floatCanvas.querySelectorAll('.float-card');
+
+            cards.forEach(card => {
+                card.addEventListener('mousedown', (e) => {
+                    if (e.target.tagName === 'A') return; // Don't drag when clicking links
+
+                    const rect = card.getBoundingClientRect();
+                    dragState = {
+                        cardEl: card,
+                        offsetX: e.clientX - rect.left,
+                        offsetY: e.clientY - rect.top
+                    };
+                    card.classList.add('dragging');
+                    e.preventDefault();
+                });
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!dragState) return;
+
+                const canvasRect = floatCanvas.getBoundingClientRect();
+                const x = e.clientX - canvasRect.left - dragState.offsetX;
+                const y = e.clientY - canvasRect.top - dragState.offsetY;
+
+                dragState.cardEl.style.left = `${x}px`;
+                dragState.cardEl.style.top = `${y}px`;
+
+                // Save position
+                const id = dragState.cardEl.dataset.id;
+                floatCardPositions[id] = { x, y };
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (dragState) {
+                    dragState.cardEl.classList.remove('dragging');
+                    dragState = null;
+                }
+            });
+        }
+
+        // Pixel art SVG data for each speaker
+        const speakerPixelArt = {
+            "dan-shipper": { icon: "quill-agent", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="20" y="8" width="4" height="4" fill="#e07a5f"/><rect x="24" y="12" width="4" height="4" fill="#e07a5f"/><rect x="28" y="16" width="4" height="4" fill="#e07a5f"/><rect x="32" y="20" width="4" height="4" fill="#e07a5f"/><rect x="36" y="24" width="4" height="4" fill="#e07a5f"/><rect x="40" y="28" width="4" height="4" fill="#e07a5f"/><rect x="44" y="32" width="4" height="4" fill="#e07a5f"/><rect x="16" y="40" width="32" height="4" fill="#5cb8b2"/><rect x="16" y="48" width="28" height="4" fill="#5cb8b2"/><rect x="16" y="56" width="24" height="4" fill="#5cb8b2"/></svg>` },
+            "ben-tossell": { icon: "blocks", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="8" y="8" width="16" height="16" fill="#8ab4f8"/><rect x="28" y="8" width="16" height="16" fill="#e07a5f"/><rect x="48" y="8" width="8" height="16" fill="#b39ddb"/><rect x="8" y="28" width="16" height="16" fill="#5cb8b2"/><rect x="28" y="28" width="16" height="16" fill="#81b88b"/><rect x="48" y="28" width="8" height="16" fill="#e07a5f"/><rect x="8" y="48" width="16" height="8" fill="#b39ddb"/><rect x="28" y="48" width="16" height="8" fill="#8ab4f8"/><rect x="48" y="48" width="8" height="8" fill="#5cb8b2"/></svg>` },
+            "ashe-magalhaes": { icon: "heart-network", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="16" y="16" width="8" height="8" fill="#e07a5f"/><rect x="40" y="16" width="8" height="8" fill="#e07a5f"/><rect x="12" y="24" width="16" height="8" fill="#e07a5f"/><rect x="36" y="24" width="16" height="8" fill="#e07a5f"/><rect x="12" y="32" width="40" height="8" fill="#e07a5f"/><rect x="16" y="40" width="32" height="8" fill="#e07a5f"/><rect x="24" y="48" width="16" height="8" fill="#e07a5f"/><rect x="28" y="56" width="8" height="4" fill="#e07a5f"/><circle cx="12" cy="12" r="3" fill="#5cb8b2"/><circle cx="52" cy="12" r="3" fill="#5cb8b2"/><circle cx="8" cy="52" r="3" fill="#5cb8b2"/><circle cx="56" cy="52" r="3" fill="#5cb8b2"/></svg>` },
+            "ryan-carson": { icon: "infinity", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="8" y="24" width="8" height="4" fill="#e07a5f"/><rect x="4" y="28" width="8" height="8" fill="#e07a5f"/><rect x="8" y="36" width="8" height="4" fill="#e07a5f"/><rect x="16" y="32" width="8" height="4" fill="#e07a5f"/><rect x="24" y="28" width="8" height="4" fill="#e07a5f"/><rect x="32" y="32" width="8" height="4" fill="#e07a5f"/><rect x="40" y="36" width="8" height="4" fill="#e07a5f"/><rect x="48" y="28" width="8" height="8" fill="#e07a5f"/><rect x="52" y="24" width="8" height="4" fill="#e07a5f"/><rect x="52" y="36" width="8" height="4" fill="#e07a5f"/><rect x="16" y="28" width="4" height="4" fill="#5cb8b2"/><rect x="44" y="32" width="4" height="4" fill="#5cb8b2"/></svg>` },
+            "natalia-nityesh": { icon: "slides", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="8" y="12" width="48" height="36" fill="#1f1f3a" stroke="#5cb8b2" stroke-width="2"/><rect x="12" y="16" width="20" height="4" fill="#e07a5f"/><rect x="12" y="24" width="40" height="2" fill="#5cb8b2"/><rect x="12" y="30" width="36" height="2" fill="#5cb8b2"/><rect x="12" y="36" width="32" height="2" fill="#5cb8b2"/><rect x="28" y="52" width="8" height="8" fill="#5cb8b2"/><rect x="20" y="56" width="24" height="4" fill="#5cb8b2"/></svg>` },
+            "katie-parrott": { icon: "pen-sparkle", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="40" y="8" width="4" height="4" fill="#81b88b"/><rect x="36" y="12" width="4" height="4" fill="#81b88b"/><rect x="32" y="16" width="4" height="4" fill="#81b88b"/><rect x="28" y="20" width="4" height="4" fill="#81b88b"/><rect x="24" y="24" width="4" height="4" fill="#81b88b"/><rect x="20" y="28" width="4" height="4" fill="#81b88b"/><rect x="16" y="32" width="4" height="4" fill="#81b88b"/><rect x="12" y="36" width="4" height="8" fill="#e07a5f"/><rect x="8" y="44" width="4" height="4" fill="#e07a5f"/><rect x="48" y="12" width="4" height="4" fill="#5cb8b2"/><rect x="52" y="8" width="4" height="4" fill="#5cb8b2"/><rect x="8" y="8" width="4" height="4" fill="#5cb8b2"/><rect x="56" y="24" width="4" height="4" fill="#5cb8b2"/></svg>` },
+            "nat-eliason": { icon: "mac-mini", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="12" y="20" width="40" height="24" rx="4" fill="#2a2a4a" stroke="#5cb8b2" stroke-width="2"/><rect x="16" y="24" width="32" height="16" fill="#0f0f23"/><rect x="28" y="28" width="8" height="8" fill="#e07a5f"/><rect x="20" y="48" width="24" height="4" fill="#5cb8b2"/><circle cx="32" cy="32" r="2" fill="#81b88b"/><rect x="24" y="12" width="4" height="4" fill="#e07a5f"/><rect x="36" y="12" width="4" height="4" fill="#e07a5f"/><rect x="30" y="8" width="4" height="4" fill="#e07a5f"/></svg>` },
+            "tina-he": { icon: "maze-zen", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="8" y="8" width="48" height="4" fill="#b39ddb"/><rect x="8" y="8" width="4" height="48" fill="#b39ddb"/><rect x="52" y="8" width="4" height="48" fill="#b39ddb"/><rect x="8" y="52" width="48" height="4" fill="#b39ddb"/><rect x="16" y="16" width="32" height="4" fill="#b39ddb"/><rect x="16" y="28" width="4" height="16" fill="#b39ddb"/><rect x="28" y="24" width="4" height="20" fill="#b39ddb"/><rect x="40" y="20" width="4" height="24" fill="#b39ddb"/><circle cx="32" cy="40" r="6" fill="#e07a5f"/></svg>` },
+            "paula-dozsa": { icon: "iphone", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="20" y="4" width="24" height="56" rx="4" fill="#1f1f3a" stroke="#5cb8b2" stroke-width="2"/><rect x="24" y="8" width="16" height="40" fill="#0f0f23"/><rect x="28" y="12" width="8" height="8" fill="#e07a5f"/><rect x="26" y="24" width="12" height="4" fill="#5cb8b2"/><rect x="26" y="32" width="12" height="4" fill="#5cb8b2"/><rect x="26" y="40" width="12" height="4" fill="#5cb8b2"/><circle cx="32" cy="54" r="3" fill="#5cb8b2"/></svg>` },
+            "cj-hess": { icon: "flowchart", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="24" y="4" width="16" height="12" fill="#b39ddb"/><rect x="8" y="28" width="16" height="12" fill="#5cb8b2"/><rect x="40" y="28" width="16" height="12" fill="#e07a5f"/><rect x="24" y="52" width="16" height="8" fill="#81b88b"/><rect x="30" y="16" width="4" height="12" fill="#5cb8b2"/><rect x="14" y="24" width="4" height="4" fill="#5cb8b2"/><rect x="46" y="24" width="4" height="4" fill="#5cb8b2"/><rect x="18" y="20" width="12" height="4" fill="#5cb8b2"/><rect x="34" y="20" width="12" height="4" fill="#5cb8b2"/><rect x="30" y="40" width="4" height="12" fill="#5cb8b2"/></svg>` },
+            "logan-ammaar": { icon: "gemini", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="16" y="8" width="8" height="48" fill="#8ab4f8"/><rect x="40" y="8" width="8" height="48" fill="#8ab4f8"/><rect x="24" y="16" width="16" height="4" fill="#e07a5f"/><rect x="24" y="28" width="16" height="4" fill="#81b88b"/><rect x="24" y="40" width="16" height="4" fill="#b39ddb"/><circle cx="20" cy="8" r="4" fill="#5cb8b2"/><circle cx="44" cy="8" r="4" fill="#5cb8b2"/><circle cx="20" cy="56" r="4" fill="#5cb8b2"/><circle cx="44" cy="56" r="4" fill="#5cb8b2"/></svg>` },
+            "geoffrey-litt": { icon: "morph-shape", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="8" y="8" width="20" height="20" fill="#81b88b" opacity="0.5"/><rect x="20" y="16" width="16" height="16" fill="#5cb8b2" opacity="0.6"/><rect x="32" y="24" width="16" height="16" fill="#b39ddb" opacity="0.7"/><rect x="36" y="36" width="20" height="20" fill="#e07a5f" opacity="0.8"/><rect x="28" y="28" width="8" height="8" fill="#fff"/></svg>` },
+            "kevin-kieran": { icon: "snowball", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><circle cx="48" cy="16" r="8" fill="#e07a5f"/><circle cx="36" cy="28" r="10" fill="#5cb8b2"/><circle cx="24" cy="44" r="14" fill="#81b88b"/><rect x="52" y="12" width="4" height="4" fill="#fff" opacity="0.6"/><rect x="42" y="24" width="4" height="4" fill="#fff" opacity="0.6"/><rect x="32" y="38" width="4" height="4" fill="#fff" opacity="0.6"/></svg>` },
+            "thariq-shihipar": { icon: "task-check", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="8" y="8" width="16" height="16" fill="#2a2a4a" stroke="#5cb8b2" stroke-width="2"/><rect x="12" y="16" width="4" height="4" fill="#81b88b"/><rect x="16" y="12" width="4" height="8" fill="#81b88b"/><rect x="28" y="12" width="28" height="4" fill="#5cb8b2"/><rect x="8" y="32" width="16" height="16" fill="#2a2a4a" stroke="#e07a5f" stroke-width="2"/><rect x="28" y="36" width="24" height="4" fill="#e07a5f"/><rect x="8" y="56" width="48" height="4" fill="#b39ddb" opacity="0.5"/></svg>` },
+            "naveen-naidu": { icon: "microphone", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="24" y="8" width="16" height="28" rx="8" fill="#5cb8b2"/><rect x="28" y="12" width="8" height="4" fill="#0f0f23"/><rect x="28" y="20" width="8" height="4" fill="#0f0f23"/><rect x="28" y="28" width="8" height="4" fill="#0f0f23"/><rect x="20" y="32" width="4" height="8" fill="#e07a5f"/><rect x="40" y="32" width="4" height="8" fill="#e07a5f"/><rect x="20" y="40" width="24" height="4" fill="#e07a5f"/><rect x="30" y="44" width="4" height="8" fill="#5cb8b2"/><rect x="24" y="52" width="16" height="4" fill="#5cb8b2"/></svg>` },
+            "yash-poojary": { icon: "magnify-code", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><circle cx="28" cy="28" r="16" fill="none" stroke="#5cb8b2" stroke-width="4"/><rect x="40" y="40" width="16" height="4" fill="#5cb8b2" transform="rotate(45 48 42)"/><rect x="20" y="24" width="4" height="8" fill="#e07a5f"/><rect x="28" y="24" width="4" height="8" fill="#e07a5f"/><rect x="24" y="28" width="8" height="4" fill="#e07a5f"/><rect x="24" y="24" width="8" height="4" fill="#e07a5f"/></svg>` },
+            "brooker-belcourt": { icon: "chart-rocket", svg: `<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="8" y="52" width="48" height="4" fill="#5cb8b2"/><rect x="12" y="44" width="8" height="8" fill="#81b88b"/><rect x="24" y="36" width="8" height="16" fill="#5cb8b2"/><rect x="36" y="24" width="8" height="28" fill="#b39ddb"/><rect x="48" y="16" width="8" height="36" fill="#e07a5f"/><rect x="48" y="8" width="8" height="8" fill="#e07a5f"/><rect x="52" y="4" width="4" height="4" fill="#fff"/></svg>` }
+        };
+
+        // Render Portrait View
+        function renderPortrait() {
+            const filtered = currentFilter === 'all'
+                ? speakers
+                : speakers.filter(s => s.world === currentFilter);
+
+            portraitCanvas.innerHTML = filtered.map(speaker => {
+                const art = speakerPixelArt[speaker.id] || { icon: "default", svg: '<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="16" y="16" width="32" height="32" fill="#5cb8b2"/></svg>' };
+                const world = WORLDS[speaker.world];
+                const worldTag = `<span class="portrait-tag ${speaker.world}">${world.icon}</span>`;
+
+                return `
+                    <article class="portrait-card" data-id="${speaker.id}">
+                        <div class="portrait-art">
+                            ${art.svg}
+                            <span class="portrait-category ${speaker.world}"></span>
+                        </div>
+                        <div class="portrait-content">
+                            <div class="portrait-name">${speaker.name}</div>
+                            <div class="portrait-org">${speaker.org}</div>
+                            <div class="portrait-topic">${speaker.topic}</div>
+                        </div>
+                        <div class="portrait-footer">
+                            <div class="portrait-tags">${worldTag}</div>
+                            <a href="${speaker.youtubeUrl}" target="_blank" class="portrait-timestamp">${speaker.timestamp}</a>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // Render List View
+        function renderList() {
+            const filtered = currentFilter === 'all'
+                ? speakers
+                : speakers.filter(s => s.world === currentFilter);
+
+            const rowsHTML = filtered.map(speaker => {
+                const art = speakerPixelArt[speaker.id] || { icon: "default", svg: '<svg viewBox="0 0 64 64" class="pixel-icon"><rect x="16" y="16" width="32" height="32" fill="#5cb8b2"/></svg>' };
+                const world = WORLDS[speaker.world];
+                const worldTag = `<span class="list-tag ${speaker.world}">${world.icon} ${world.name}</span>`;
+
+                return `
+                    <div class="list-row" data-id="${speaker.id}">
+                        <div class="list-icon">${art.svg}</div>
+                        <div class="list-info">
+                            <div class="list-name">${speaker.name}</div>
+                            <div class="list-topic">${speaker.topic}</div>
+                        </div>
+                        <div class="list-org">${speaker.org}</div>
+                        <div class="list-tags">${worldTag}</div>
+                        <a href="${speaker.youtubeUrl}" target="_blank" class="list-timestamp">${speaker.timestamp}</a>
+                    </div>
+                `;
+            }).join('');
+
+            listCanvas.innerHTML = `
+                <div class="list-container">
+                    <div class="list-header">
+                        <span></span>
+                        <span>Speaker</span>
+                        <span>Organization</span>
+                        <span>World</span>
+                        <span>Time</span>
+                    </div>
+                    ${rowsHTML}
+                </div>
+            `;
+        }
+
+        // Open deck fan overlay
+        function openDeckFan(worldId) {
+            const world = WORLDS[worldId];
+            const cardsInDeck = speakers.filter(s => s.world === worldId);
+
+            deckFanTitle.textContent = `${world.icon} ${world.name}`;
+            deckFanTitle.className = `deck-fan-title ${worldId}`;
+            deckFanTitle.style.color = world.color;
+            deckFanCards.innerHTML = cardsInDeck.map(s => createCardHTML(s)).join('');
+            deckFan.classList.add('active');
+        }
+
+        // Close deck fan
+        function closeDeckFan() {
+            deckFan.classList.remove('active');
+        }
+
+        // Switch mode
+        function switchMode(mode) {
+            currentMode = mode;
+            document.body.className = `mode-${mode}`;
+
+            // Update tabs
+            document.querySelectorAll('.mode-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.mode === mode);
+            });
+
+            // Render appropriate view
+            if (mode === 'grid') renderGrid();
+            else if (mode === 'kanban') renderKanban();
+            else if (mode === 'stacks') renderStacks();
+            else if (mode === 'float') renderFloat();
+            else if (mode === 'portrait') renderPortrait();
+            else if (mode === 'list') renderList();
+        }
+
+        // Apply filter
+        function applyFilter(worldId) {
+            currentFilter = worldId;
+
+            // Update chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.world === worldId);
+            });
+
+            // Re-render current view
+            switchMode(currentMode);
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.mode-tab').forEach(tab => {
+            tab.addEventListener('click', () => switchMode(tab.dataset.mode));
+        });
+
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => applyFilter(chip.dataset.world));
+        });
+
+        deckFanClose.addEventListener('click', closeDeckFan);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '1') switchMode('grid');
+            else if (e.key === '2') switchMode('kanban');
+            else if (e.key === '3') switchMode('stacks');
+            else if (e.key === '4') switchMode('float');
+            else if (e.key === '5') switchMode('portrait');
+            else if (e.key === '6') switchMode('list');
+            else if (e.key === 'Escape') closeDeckFan();
+        });
+
+        // Float control buttons
+        document.getElementById('float-scatter').addEventListener('click', scatterCards);
+        document.getElementById('float-grid-arrange').addEventListener('click', arrangeGrid);
+        document.getElementById('float-circle').addEventListener('click', arrangeCircle);
+        document.getElementById('float-by-category').addEventListener('click', groupByCategory);
+
+        // Initial render
+        renderGrid();
+    </script>
+</body>
+</html>

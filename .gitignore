@@ -1,0 +1,5 @@
+# Local development files (not deployed)
+_local/
+
+# OS files
+.DS_Store
