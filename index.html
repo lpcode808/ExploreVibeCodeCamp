@@ -1563,7 +1563,6 @@
     <button class="shortcut-btn" id="btn-sidebar"><kbd>T</kbd> Sidebar</button>
     <button class="shortcut-btn" id="btn-slideshow"><kbd>S</kbd> Slideshow</button>
     <button class="shortcut-btn" id="btn-search"><kbd>⌘K</kbd> Search</button>
-    <button class="shortcut-btn" id="btn-reflection" style="border-color: var(--accent-purple); color: var(--accent-purple);"><kbd>R</kbd> Reflections</button>
 </div>
 
 <a href="https://www.youtube.com/watch?v=5YBjll9XJlw" target="_blank" rel="noopener noreferrer">
@@ -1651,6 +1650,38 @@
         <div class="explore-card-body">
             <div class="explore-card-title">Play the RPG</div>
             <div class="explore-card-desc">Explore 6 worlds, talk to NPCs, and collect insights from all 20 speakers in this pixel adventure.</div>
+        </div>
+    </a>
+    <a href="#" class="explore-card" id="reflection-card">
+        <div class="explore-card-thumb">
+            <svg viewBox="0 0 180 120" fill="none">
+                <!-- Background -->
+                <rect x="0" y="0" width="180" height="120" fill="#1a1a2e"/>
+                <!-- Mirror Frame -->
+                <rect x="65" y="20" width="50" height="80" rx="4" fill="#2d2d2d" stroke="#b39ddb" stroke-width="4"/>
+                <!-- Mirror Glass -->
+                <rect x="69" y="24" width="42" height="72" fill="#4a4a6a"/>
+                <!-- Reflection Lines -->
+                <rect x="75" y="35" width="4" height="4" fill="#8080c0" opacity="0.6"/>
+                <rect x="79" y="39" width="4" height="4" fill="#8080c0" opacity="0.6"/>
+                <rect x="95" y="70" width="8" height="2" fill="#8080c0" opacity="0.4"/>
+                <rect x="90" y="74" width="12" height="2" fill="#8080c0" opacity="0.4"/>
+                <!-- Decorative Elements -->
+                <rect x="60" y="20" width="5" height="10" fill="#b39ddb"/>
+                <rect x="115" y="20" width="5" height="10" fill="#b39ddb"/>
+                <rect x="80" y="15" width="20" height="5" fill="#b39ddb"/>
+                <rect x="60" y="90" width="5" height="10" fill="#b39ddb"/>
+                <rect x="115" y="90" width="5" height="10" fill="#b39ddb"/>
+                <rect x="80" y="100" width="20" height="5" fill="#b39ddb"/>
+                <!-- Sparkles -->
+                <rect x="50" y="30" width="4" height="4" fill="#e07a5f"/>
+                <rect x="130" y="80" width="4" height="4" fill="#5cb8b2"/>
+                <rect x="120" y="30" width="2" height="2" fill="#fff"/>
+            </svg>
+        </div>
+        <div class="explore-card-body">
+            <div class="explore-card-title">Project Reflections</div>
+            <div class="explore-card-desc">Read lessons learned, errors encountered, and key insights from building this project.</div>
         </div>
     </a>
 </div>
@@ -3274,6 +3305,92 @@ function initSlideshow() {
 }
 
 // ============================================================================
+// Reflection Modal
+// ============================================================================
+
+const reflectionModal = document.getElementById('reflection-modal');
+const reflectionBody = document.querySelector('.reflection-body');
+let reflectionLoaded = false;
+
+function parseMarkdown(md) {
+    let html = md
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+        .replace(/\*(.*)\*/gim, '<em>$1</em>')
+        .replace(/^- (.*$)/gim, '<li>$1</li>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank">$1</a>')
+        .replace(/\n\n/gim, '<p></p>')
+        .replace(/(<li>.*<\/li>)/gim, '<ul>$1</ul>')
+        .replace(/<\/ul>\s*<ul>/gim, '');
+
+    return html;
+}
+
+async function loadReflectionContent() {
+    if (reflectionLoaded) return;
+    
+    try {
+        const response = await fetch('reflections/lessons.md');
+        if (!response.ok) throw new Error('Failed to load reflections');
+        const text = await response.text();
+        reflectionBody.innerHTML = parseMarkdown(text);
+        reflectionLoaded = true;
+    } catch (err) {
+        reflectionBody.innerHTML = `<p>Error loading reflections: ${err.message}</p>`;
+    }
+}
+
+function openReflectionModal() {
+    loadReflectionContent();
+    reflectionModal.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeReflectionModal() {
+    reflectionModal.classList.remove('visible');
+    document.body.style.overflow = '';
+}
+
+function initReflections() {
+    const card = document.getElementById('reflection-card');
+    if (card) {
+        card.addEventListener('click', (e) => {
+            e.preventDefault();
+            openReflectionModal();
+        });
+    }
+    
+    const closeBtn = document.querySelector('.reflection-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeReflectionModal);
+    }
+    
+    if (reflectionModal) {
+        reflectionModal.addEventListener('click', (e) => {
+            if (e.target === reflectionModal || e.target.classList.contains('reflection-backdrop')) {
+                closeReflectionModal();
+            }
+        });
+    }
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'r' || e.key === 'R') {
+            if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) && 
+                document.body.classList.contains('toc-hidden') && 
+                !reflectionModal.classList.contains('visible') &&
+                !isSlideshowMode) {
+                openReflectionModal();
+            }
+        }
+        if (e.key === 'Escape' && reflectionModal.classList.contains('visible')) {
+            closeReflectionModal();
+        }
+    });
+}
+
+// ============================================================================
 // Initialize
 // ============================================================================
 
@@ -3282,6 +3399,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActiveSection();
     updateProgress();
     initSlideshow();
+    initReflections();
     document.body.classList.add('toc-hidden');
 });
 </script>
