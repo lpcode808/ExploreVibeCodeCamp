@@ -103,10 +103,41 @@
         }
 
         .subtitle {
-            font-style: italic;
-            color: var(--text-secondary);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
             margin-bottom: 2rem;
-            font-size: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .shortcut-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.75rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .shortcut-btn:hover {
+            border-color: var(--accent-coral);
+            color: #fff;
+            background: rgba(224, 122, 95, 0.1);
+        }
+
+        .shortcut-btn kbd {
+            background: var(--bg-secondary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent-coral);
         }
 
         h2 {
@@ -1384,7 +1415,13 @@
 <div class="main-content">
 
 <h1>Vibe Code Camp</h1>
-<p class="subtitle"><kbd>T</kbd> sidebar <kbd>S</kbd> slideshow <kbd>Cmd+K</kbd> search <kbd>←</kbd><kbd>→</kbd> navigate <kbd>Esc</kbd> close</p>
+<div class="subtitle">
+    <button class="shortcut-btn" id="btn-sidebar"><kbd>T</kbd> Sidebar</button>
+    <button class="shortcut-btn" id="btn-slideshow"><kbd>S</kbd> Slideshow</button>
+    <button class="shortcut-btn" id="btn-search"><kbd>⌘K</kbd> Search</button>
+    <button class="shortcut-btn" id="btn-prev"><kbd>←</kbd> Prev</button>
+    <button class="shortcut-btn" id="btn-next"><kbd>→</kbd> Next</button>
+</div>
 
 <a href="https://www.youtube.com/watch?v=5YBjll9XJlw" target="_blank" rel="noopener noreferrer">
     <div class="video-container">
@@ -2737,6 +2774,21 @@ document.getElementById('back-to-top').addEventListener('click', () => {
 document.getElementById('search-button').addEventListener('click', openSearch);
 document.getElementById('search-close').addEventListener('click', closeSearch);
 document.querySelector('.search-backdrop').addEventListener('click', closeSearch);
+
+// Shortcut buttons
+document.getElementById('btn-sidebar').addEventListener('click', () => {
+    document.body.classList.toggle('toc-hidden');
+});
+document.getElementById('btn-slideshow').addEventListener('click', () => {
+    if (typeof toggleSlideshowMode === 'function') toggleSlideshowMode();
+});
+document.getElementById('btn-search').addEventListener('click', openSearch);
+document.getElementById('btn-prev').addEventListener('click', () => {
+    if (isSlideshowMode && typeof prevSlide === 'function') prevSlide();
+});
+document.getElementById('btn-next').addEventListener('click', () => {
+    if (isSlideshowMode && typeof nextSlide === 'function') nextSlide();
+});
 
 searchInput.addEventListener('input', (e) => {
     const results = searchDocument(e.target.value);
