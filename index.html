@@ -228,18 +228,35 @@
         .speaker-timestamp {
             font-family: var(--font-mono);
             font-size: 0.8rem;
-            color: var(--text-muted);
-            background: var(--bg-secondary);
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.12);
             padding: 0.25rem 0.75rem;
             border-radius: 999px;
+            border: 1px solid rgba(255, 107, 107, 0.25);
+            transition: all 0.2s;
         }
 
         .speaker-timestamp a {
             color: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+
+        .speaker-timestamp a::before {
+            content: '▶';
+            font-size: 0.65rem;
+        }
+
+        .speaker-timestamp:hover {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.4);
         }
 
         .speaker-timestamp a:hover {
-            color: var(--accent-coral);
+            color: #fff;
+            text-decoration: none;
         }
 
         .speaker-topic {
@@ -1366,7 +1383,7 @@
 <div class="main-content">
 
 <h1>Vibe Code Camp</h1>
-<p class="subtitle">The full transcript from Every's 8-hour marathon livestream featuring the world's best vibe coders building live with Claude Code, Opus 4.5, and AI tools.</p>
+<p class="subtitle"><kbd>T</kbd> sidebar <kbd>S</kbd> slideshow <kbd>Cmd+K</kbd> search <kbd>←</kbd><kbd>→</kbd> navigate <kbd>Esc</kbd> close</p>
 
 <a href="https://www.youtube.com/watch?v=5YBjll9XJlw" target="_blank" rel="noopener noreferrer">
     <div class="video-container">
@@ -3068,9 +3085,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActiveSection();
     updateProgress();
     initSlideshow();
-    if (window.innerWidth <= 1024) {
-        document.body.classList.add('toc-hidden');
-    }
+    document.body.classList.add('toc-hidden');
 });
 </script>
 

@@ -197,10 +197,27 @@
         .card-timestamp {
             font-family: var(--font-mono);
             font-size: 0.7rem;
-            color: var(--text-muted);
-            background: var(--bg-surface);
-            padding: 4px 8px;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.12);
+            padding: 4px 10px;
             border-radius: 4px;
+            border: 1px solid rgba(255, 107, 107, 0.25);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .card-timestamp::before {
+            content: '▶';
+            font-size: 0.6rem;
+        }
+
+        .card-timestamp:hover {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.4);
+            color: #fff;
         }
 
         .card-topic {
@@ -637,14 +654,18 @@
         .float-card .card-timestamp {
             font-family: var(--font-mono);
             font-size: 0.6rem;
-            color: var(--text-muted);
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.12);
             text-decoration: none;
-            padding: 0;
-            background: none;
+            padding: 3px 6px;
+            border: 1px solid rgba(255, 107, 107, 0.25);
+            border-radius: 3px;
         }
 
         .float-card .card-timestamp:hover {
-            color: var(--accent-coral);
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.4);
+            color: #fff;
         }
 
         /* Float controls */
@@ -809,16 +830,27 @@
         .list-timestamp {
             font-family: var(--font-mono);
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.12);
             text-decoration: none;
-            padding: 4px 8px;
-            background: var(--bg-surface);
+            padding: 4px 10px;
             border-radius: 4px;
+            border: 1px solid rgba(255, 107, 107, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
             transition: all 0.15s;
         }
 
+        .list-timestamp::before {
+            content: '▶';
+            font-size: 0.6rem;
+        }
+
         .list-timestamp:hover {
-            color: var(--accent-coral);
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.4);
+            color: #fff;
             background: rgba(224, 122, 95, 0.15);
         }
 
@@ -1001,12 +1033,27 @@
         .portrait-timestamp {
             font-family: var(--font-mono);
             font-size: 0.6rem;
-            color: var(--text-muted);
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.12);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 107, 107, 0.25);
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .portrait-timestamp::before {
+            content: '▶';
+            font-size: 0.5rem;
         }
 
         .portrait-timestamp:hover {
-            color: var(--accent-coral);
+            background: rgba(255, 107, 107, 0.2);
+            border-color: rgba(255, 107, 107, 0.4);
+            color: #fff;
         }
 
         /* Footer hint */
