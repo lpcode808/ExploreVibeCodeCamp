@@ -1057,6 +1057,122 @@
             color: #fff;
         }
 
+        /* Speaker Detail Popup */
+        .speaker-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .speaker-popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .speaker-popup {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .speaker-popup-overlay.active .speaker-popup {
+            transform: scale(1);
+        }
+
+        .speaker-popup-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .speaker-popup-close:hover {
+            background: rgba(255, 96, 64, 0.2);
+            border-color: var(--world-agent);
+            color: var(--world-agent);
+        }
+
+        .speaker-popup .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .speaker-popup .card-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .speaker-popup .card-org {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .speaker-popup .card-topic {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .speaker-popup .card-tags {
+            margin-bottom: 16px;
+        }
+
+        .speaker-popup .card-highlights {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .speaker-popup .card-highlights li {
+            padding: 8px 0 8px 20px;
+            position: relative;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .speaker-popup .card-highlights li:last-child {
+            border-bottom: none;
+        }
+
+        .speaker-popup .card-highlights li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--world-agent);
+        }
+
         /* Footer hint */
         .footer-hint {
             position: fixed;
@@ -1181,6 +1297,19 @@
     <!-- Footer Hint -->
     <div class="footer-hint">
         Press <kbd>1</kbd>-<kbd>6</kbd> to switch views
+    </div>
+
+    <!-- Speaker Detail Popup -->
+    <div class="speaker-popup-overlay" id="speaker-popup-overlay">
+        <div class="speaker-popup" id="speaker-popup">
+            <button class="speaker-popup-close" id="speaker-popup-close">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div id="speaker-popup-content"></div>
+        </div>
     </div>
 
     <script>
@@ -1921,7 +2050,10 @@
             else if (e.key === '4') switchMode('float');
             else if (e.key === '5') switchMode('portrait');
             else if (e.key === '6') switchMode('list');
-            else if (e.key === 'Escape') closeDeckFan();
+            else if (e.key === 'Escape') {
+                closeDeckFan();
+                closeSpeakerPopup();
+            }
         });
 
         // Float control buttons
@@ -1929,6 +2061,81 @@
         document.getElementById('float-grid-arrange').addEventListener('click', arrangeGrid);
         document.getElementById('float-circle').addEventListener('click', arrangeCircle);
         document.getElementById('float-by-category').addEventListener('click', groupByCategory);
+
+        // Speaker Popup
+        const popupOverlay = document.getElementById('speaker-popup-overlay');
+        const popupContent = document.getElementById('speaker-popup-content');
+        const popupClose = document.getElementById('speaker-popup-close');
+
+        function openSpeakerPopup(speakerId) {
+            const speaker = speakers.find(s => s.id === speakerId);
+            if (!speaker) return;
+
+            const world = WORLDS[speaker.world];
+            popupContent.innerHTML = `
+                <div class="card-header">
+                    <div>
+                        <div class="card-name">${speaker.name}</div>
+                        <div class="card-org">${speaker.org}</div>
+                    </div>
+                    <a href="${speaker.youtubeUrl}" target="_blank" class="card-timestamp">${speaker.timestamp}</a>
+                </div>
+                <div class="card-topic">${speaker.topic}</div>
+                <div class="card-tags">
+                    <span class="card-tag ${speaker.world}">${world.icon} ${world.name}</span>
+                </div>
+                <ul class="card-highlights">
+                    ${speaker.highlights.map(h => `<li>${h}</li>`).join('')}
+                </ul>
+            `;
+            popupOverlay.classList.add('active');
+        }
+
+        function closeSpeakerPopup() {
+            popupOverlay.classList.remove('active');
+        }
+
+        popupClose.addEventListener('click', closeSpeakerPopup);
+        popupOverlay.addEventListener('click', (e) => {
+            if (e.target === popupOverlay) closeSpeakerPopup();
+        });
+
+        // Add click handlers for views that need popups (kanban, float, portrait, list)
+        function addPopupClickHandlers() {
+            // Kanban cards (uses .speaker-card from createCardHTML)
+            kanbanCanvas.addEventListener('click', (e) => {
+                const card = e.target.closest('.speaker-card');
+                if (card && !e.target.closest('a')) {
+                    openSpeakerPopup(card.dataset.id);
+                }
+            });
+
+            // Float cards
+            floatCanvas.addEventListener('click', (e) => {
+                const card = e.target.closest('.float-card');
+                if (card && !e.target.closest('a') && !dragState) {
+                    openSpeakerPopup(card.dataset.id);
+                }
+            });
+
+            // Portrait cards
+            portraitCanvas.addEventListener('click', (e) => {
+                const card = e.target.closest('.portrait-card');
+                if (card && !e.target.closest('a')) {
+                    openSpeakerPopup(card.dataset.id);
+                }
+            });
+
+            // List rows
+            listCanvas.addEventListener('click', (e) => {
+                const row = e.target.closest('.list-row');
+                if (row && !e.target.closest('a')) {
+                    openSpeakerPopup(row.dataset.id);
+                }
+            });
+        }
+
+        addPopupClickHandlers();
 
         // Initial render
         renderGrid();

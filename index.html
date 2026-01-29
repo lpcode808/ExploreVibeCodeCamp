@@ -946,6 +946,29 @@
             cursor: not-allowed;
         }
 
+        .slide-exit-btn {
+            position: absolute;
+            top: -48px;
+            right: 0;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .slide-exit-btn:hover {
+            background: rgba(224, 122, 95, 0.2);
+            border-color: var(--accent-coral);
+            color: var(--accent-coral);
+        }
+
         .slide-dots {
             display: flex;
             gap: 6px;
@@ -1419,8 +1442,6 @@
     <button class="shortcut-btn" id="btn-sidebar"><kbd>T</kbd> Sidebar</button>
     <button class="shortcut-btn" id="btn-slideshow"><kbd>S</kbd> Slideshow</button>
     <button class="shortcut-btn" id="btn-search"><kbd>⌘K</kbd> Search</button>
-    <button class="shortcut-btn" id="btn-prev"><kbd>←</kbd> Prev</button>
-    <button class="shortcut-btn" id="btn-next"><kbd>→</kbd> Next</button>
 </div>
 
 <a href="https://www.youtube.com/watch?v=5YBjll9XJlw" target="_blank" rel="noopener noreferrer">
@@ -2485,6 +2506,12 @@
 
 <!-- Slideshow Navigation -->
 <div id="slideshow-nav" class="slideshow-hidden">
+    <button id="slide-exit" class="slide-exit-btn" aria-label="Exit slideshow" title="Exit (Esc)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </button>
     <button id="slide-prev" class="slide-nav-btn" aria-label="Previous slide">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="15 18 9 12 15 6"></polyline>
@@ -2783,12 +2810,6 @@ document.getElementById('btn-slideshow').addEventListener('click', () => {
     if (typeof toggleSlideshowMode === 'function') toggleSlideshowMode();
 });
 document.getElementById('btn-search').addEventListener('click', openSearch);
-document.getElementById('btn-prev').addEventListener('click', () => {
-    if (isSlideshowMode && typeof prevSlide === 'function') prevSlide();
-});
-document.getElementById('btn-next').addEventListener('click', () => {
-    if (isSlideshowMode && typeof nextSlide === 'function') nextSlide();
-});
 
 searchInput.addEventListener('input', (e) => {
     const results = searchDocument(e.target.value);
@@ -3123,6 +3144,7 @@ function initSlideshow() {
     slideshowToggle.addEventListener('click', toggleSlideshowMode);
     slidePrev.addEventListener('click', prevSlide);
     slideNext.addEventListener('click', nextSlide);
+    document.getElementById('slide-exit').addEventListener('click', toggleSlideshowMode);
 
     // Touch events
     document.addEventListener('touchstart', handleTouchStart, { passive: true });
