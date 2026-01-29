@@ -509,36 +509,41 @@
         /* Navigation Links */
         #nav-links {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            gap: 10px;
-            z-index: 90;
-            pointer-events: auto;
+            gap: 240px; /* Gap to space them around the inventory (which is ~150px wide) */
+            z-index: 45; /* Above HUD but below Journal/Dialogues */
+            pointer-events: none; /* Container ignores clicks */
+            width: 100%;
+            justify-content: center;
         }
 
         .nav-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(20, 20, 40, 0.8);
+            width: 36px;
+            height: 36px;
+            background: rgba(20, 20, 40, 0.9);
             border: 2px solid #4a4a6a;
-            border-radius: 4px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
             cursor: pointer;
+            pointer-events: auto; /* Buttons accept clicks */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .nav-icon:hover {
             border-color: #f8a848;
             transform: translateY(-2px);
-            background: rgba(40, 40, 60, 0.9);
+            background: rgba(40, 40, 60, 1);
         }
 
         .nav-icon img {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             image-rendering: pixelated;
         }
     </style>
