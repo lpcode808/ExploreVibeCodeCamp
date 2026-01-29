@@ -1,0 +1,19 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <!-- Book 1 (Bottom - Brown) -->
+  <rect x="4" y="24" width="24" height="6" fill="#5D4037"/>
+  <rect x="26" y="24" width="2" height="6" fill="#fff"/> <!-- Pages edge -->
+  <rect x="6" y="25" width="20" height="2" fill="#8D6E63"/> <!-- Spine highlight -->
+  
+  <!-- Book 2 (Middle - Teal) -->
+  <rect x="6" y="17" width="20" height="5" fill="#2E5D58"/>
+  <rect x="24" y="17" width="2" height="5" fill="#fff"/>
+  <rect x="8" y="18" width="16" height="1" fill="#5cb8b2"/>
+  
+  <!-- Book 3 (Top - Coral) -->
+  <rect x="8" y="10" width="16" height="5" fill="#A84835"/>
+  <rect x="22" y="10" width="2" height="5" fill="#fff"/>
+  <rect x="10" y="11" width="12" height="1" fill="#e07a5f"/>
+  
+  <!-- Title text lines on top book -->
+  <rect x="10" y="12" width="8" height="1" fill="#333" opacity="0.3"/>
+</svg>

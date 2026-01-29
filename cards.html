@@ -70,6 +70,36 @@
             color: #fff;
         }
 
+        /* Nav Icons */
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            margin-right: 12px;
+        }
+
+        .nav-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-icon:hover {
+            border-color: var(--accent-teal);
+            background: var(--bg-card);
+            transform: translateY(-2px);
+        }
+
+        .nav-icon img {
+            width: 24px;
+            height: 24px;
+        }
+
         .mode-tabs {
             display: flex;
             gap: 4px;
@@ -1203,6 +1233,14 @@
     <!-- Header -->
     <header class="header">
         <div class="header-left">
+            <div class="nav-links">
+                <a href="index.html" class="nav-icon" title="Back to Guide">
+                    <img src="nav-icon-guide.svg" alt="Guide">
+                </a>
+                <a href="rpg/index.html" class="nav-icon" title="Go to RPG">
+                    <img src="nav-icon-rpg.svg" alt="RPG">
+                </a>
+            </div>
             <h1>Vibe Code Camp Cards</h1>
             <div class="mode-tabs">
                 <button class="mode-tab active" data-mode="grid">Grid <kbd>1</kbd></button>
