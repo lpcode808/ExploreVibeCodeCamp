@@ -1505,6 +1505,253 @@
                 background: transparent;
             }
         }
+        /* Infographics Modal */
+        #infographics-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        #infographics-modal.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .infographics-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+        }
+
+        .infographics-content {
+            position: relative;
+            background: var(--bg-primary);
+            width: 95%;
+            height: 95vh;
+            border-radius: 16px;
+            border: 1px solid var(--accent-teal);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #infographics-modal.visible .infographics-content {
+            transform: scale(1);
+        }
+
+        .infographics-header {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-secondary);
+        }
+
+        .infographics-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .infographics-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-left: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .infographics-subtitle a {
+            color: var(--accent-teal);
+            text-decoration: none;
+        }
+
+        .infographics-subtitle a:hover {
+            text-decoration: underline;
+        }
+
+        .infographics-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .infographics-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .infographics-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .infographics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .infographic-item {
+            background: var(--bg-code);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .infographic-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            cursor: zoom-in;
+            transition: transform 0.2s;
+        }
+        
+        .infographic-item img:hover {
+            transform: scale(1.02);
+        }
+
+        .infographic-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Lightbox Viewer */
+        .lightbox-viewer {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--bg-code);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .lightbox-main {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .lightbox-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            padding: 8px 0;
+        }
+
+        .lightbox-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lightbox-btn:hover {
+            background: var(--accent-teal);
+            border-color: var(--accent-teal);
+            color: #fff;
+        }
+
+        .lightbox-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--bg-secondary);
+            border-color: var(--border);
+            color: var(--text-muted);
+        }
+
+        .lightbox-counter {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .infographics-content {
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+                border: none;
+            }
+            .infographics-grid {
+                grid-template-columns: 1fr;
+            }
+            .infographics-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .infographics-subtitle {
+                margin-left: 0;
+            }
+            .infographics-close {
+                position: absolute;
+                top: 16px;
+                right: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2677,7 +2924,7 @@
         <a href="https://github.com/EveryInc/vibe-code-camp" target="_blank">Original transcript</a> from Every Inc.
     </p>
     <p style="margin-top: 1rem; font-style: normal;">
-        <a href="https://x.com/danshipper/status/1881459635698503893" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(29, 161, 242, 0.1); color: #1da1f2; padding: 8px 16px; border-radius: 999px; text-decoration: none; border: 1px solid rgba(29, 161, 242, 0.2); transition: all 0.2s;">
+        <a href="https://x.com/danshipper/status/2014774685091668417" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(29, 161, 242, 0.1); color: #1da1f2; padding: 8px 16px; border-radius: 999px; text-decoration: none; border: 1px solid rgba(29, 161, 242, 0.2); transition: all 0.2s;">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             <strong>Join the Vibe Coding Revolution (Dan Shipper on X)</strong>
         </a>
@@ -2787,6 +3034,74 @@
         </div>
         <div class="reflection-body">
             <!-- Content loaded via JS -->
+        </div>
+    </div>
+</div>
+
+<!-- Infographics Modal -->
+<div id="infographics-modal">
+    <div class="infographics-backdrop"></div>
+    <div class="infographics-content">
+        <div class="infographics-header">
+            <div class="infographics-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="3" y1="9" x2="21" y2="9"></line>
+                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>
+                Infographics & Visual Summaries
+                <div class="infographics-subtitle">
+                    Generated by <a href="https://acaiberry.substack.com/p/google-gemini-creates-informative" target="_blank">Google's NotebookLM</a>
+                </div>
+            </div>
+            <button class="infographics-close" aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="infographics-body">
+            
+            <!-- Main Overviews -->
+            <div class="infographics-grid">
+                <div class="infographic-item">
+                    <a href="img/landscape vibe code camp.png" target="_blank">
+                        <img src="img/landscape vibe code camp.png" alt="Landscape Overview of Vibe Code Camp">
+                    </a>
+                    <div class="infographic-label">Landscape Overview</div>
+                </div>
+                <div class="infographic-item">
+                    <a href="img/portrait vibe code camp.png" target="_blank">
+                        <img src="img/portrait vibe code camp.png" alt="Portrait Overview of Vibe Code Camp">
+                    </a>
+                    <div class="infographic-label">Portrait Overview</div>
+                </div>
+            </div>
+
+            <hr style="width: 100%; border-color: var(--border);">
+
+            <!-- Slides Lightbox -->
+            <div class="lightbox-viewer">
+                <div class="infographic-label" style="align-self: flex-start;">Session Slides (12 Pages)</div>
+                <div class="lightbox-main">
+                    <img id="lightbox-img" class="lightbox-image" src="img/page-01.jpg" alt="Slide 1">
+                </div>
+                <div class="lightbox-controls">
+                    <button id="lightbox-prev" class="lightbox-btn" aria-label="Previous slide">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <div id="lightbox-counter" class="lightbox-counter">1 / 12</div>
+                    <button id="lightbox-next" class="lightbox-btn" aria-label="Next slide">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
         </div>
     </div>
 </div>
@@ -3479,10 +3794,121 @@ function initReflections() {
         }
         */
         const modal = document.getElementById('reflection-modal');
-        if (e.key === 'Escape' && modal && modal.classList.contains('visible')) {
-            closeReflectionModal();
+        if (e.key === 'Escape') {
+            if (modal && modal.classList.contains('visible')) {
+                closeReflectionModal();
+            }
+            const infoModal = document.getElementById('infographics-modal');
+            if (infoModal && infoModal.classList.contains('visible')) {
+                closeInfographicsModal();
+            }
+        }
+        
+        // Lightbox navigation with arrow keys if modal is open
+        const infoModal = document.getElementById('infographics-modal');
+        if (infoModal && infoModal.classList.contains('visible')) {
+            if (e.key === 'ArrowLeft') {
+                prevLightboxSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextLightboxSlide();
+            }
         }
     });
+}
+
+// ============================================================================
+// Infographics Modal & Lightbox
+// ============================================================================
+
+let currentLightboxIndex = 1;
+const totalLightboxSlides = 12;
+
+function openInfographicsModal() {
+    const modal = document.getElementById('infographics-modal');
+    if (!modal) return;
+    modal.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeInfographicsModal() {
+    const modal = document.getElementById('infographics-modal');
+    if (!modal) return;
+    modal.classList.remove('visible');
+    document.body.style.overflow = '';
+}
+
+function updateLightboxImage() {
+    const img = document.getElementById('lightbox-img');
+    const counter = document.getElementById('lightbox-counter');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+    
+    // Format index with leading zero if needed (e.g. page-01.jpg)
+    const formattedIndex = currentLightboxIndex < 10 ? `0${currentLightboxIndex}` : currentLightboxIndex;
+    
+    // Preload image to avoid flicker
+    const newSrc = `img/page-${formattedIndex}.jpg`;
+    
+    img.style.opacity = '0.5';
+    
+    const loader = new Image();
+    loader.onload = () => {
+        img.src = newSrc;
+        img.style.opacity = '1';
+    };
+    loader.src = newSrc;
+    
+    counter.textContent = `${currentLightboxIndex} / ${totalLightboxSlides}`;
+    
+    prevBtn.disabled = currentLightboxIndex === 1;
+    nextBtn.disabled = currentLightboxIndex === totalLightboxSlides;
+}
+
+function prevLightboxSlide() {
+    if (currentLightboxIndex > 1) {
+        currentLightboxIndex--;
+        updateLightboxImage();
+    }
+}
+
+function nextLightboxSlide() {
+    if (currentLightboxIndex < totalLightboxSlides) {
+        currentLightboxIndex++;
+        updateLightboxImage();
+    }
+}
+
+function initInfographics() {
+    const card = document.getElementById('infographics-card');
+    const modal = document.getElementById('infographics-modal');
+    const closeBtn = document.querySelector('.infographics-close');
+    const prevBtn = document.getElementById('lightbox-prev');
+    const nextBtn = document.getElementById('lightbox-next');
+
+    if (card) {
+        card.addEventListener('click', (e) => {
+            e.preventDefault();
+            openInfographicsModal();
+        });
+    }
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeInfographicsModal);
+    }
+    
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target.classList.contains('infographics-backdrop')) {
+                closeInfographicsModal();
+            }
+        });
+    }
+    
+    if (prevBtn) prevBtn.addEventListener('click', prevLightboxSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextLightboxSlide);
+    
+    // Initialize state
+    updateLightboxImage();
 }
 
 // ============================================================================
@@ -3495,6 +3921,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateProgress();
     initSlideshow();
     initReflections();
+    initInfographics();
     document.body.classList.add('toc-hidden');
 });
 </script>
