@@ -6,7 +6,7 @@ Interactive tools for exploring Every's 8-hour Vibe Code Camp livestream featuri
 
 ## What's Inside
 
-- **Guide** — Searchable transcript with keyboard navigation and slideshow mode
+- **[Guide](https://lpcode808.github.io/ExploreVibeCodeCamp/)** — Searchable transcript with keyboard navigation and slideshow mode
 - **[Speaker Cards](https://lpcode808.github.io/ExploreVibeCodeCamp/cards.html)** — 6 different views to browse speakers (grid, kanban, stacks, float, portraits, list)
 - **[RPG](https://lpcode808.github.io/ExploreVibeCodeCamp/rpg/)** — Pixel art game where you explore 6 worlds and collect insights from all 20 speakers
 
@@ -24,11 +24,11 @@ Interactive tools for exploring Every's 8-hour Vibe Code Camp livestream featuri
 
 | World | Speakers |
 |-------|----------|
-| Vibe Village | Dan Shipper, Tina He, Paula Dozsa, Katie Parrott |
-| Agent Forge | Nat Eliason, Ben Tossell, Ryan Carson, Ashe Magalhaes |
-| Research Spire | Geoffrey Litt, Thariq Shihipar, Logan Kilpatrick, Ammaar Reshi |
-| Builder's Guild | CJ Hess, Naveen Naidu, Yash Poojary, Kevin Rose |
-| Consulting Keep | Kieran Klaassen, Natalia Quintero, Nityesh Agarwal, Brooker Belcourt |
+| 🏡 Vibe Village | Dan Shipper, Tina He, Paula Dozsa, Katie Parrott |
+| ⚒️ Agent Forge | Nat Eliason, Ben Tossell, Ryan Carson, Ashe Magalhaes |
+| 🔬 Research Spire | Geoffrey Litt, Thariq Shihipar, Logan Kilpatrick, Ammaar Reshi |
+| 🧱 Builder's Guild | CJ Hess, Naveen Naidu, Yash Poojary, Kevin Rose |
+| 🏰 Consulting Keep | Kieran Klaassen, Natalia Quintero, Nityesh Agarwal, Brooker Belcourt |
 
 ## Credits
 
