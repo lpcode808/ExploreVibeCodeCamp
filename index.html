@@ -1618,9 +1618,9 @@
         }
 
         .infographics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
             width: 100%;
             max-width: 1400px;
         }
@@ -1634,6 +1634,7 @@
             flex-direction: column;
             gap: 12px;
             align-items: center;
+            width: 100%;
         }
 
         .infographic-item img {
@@ -1642,6 +1643,14 @@
             border-radius: 8px;
             cursor: zoom-in;
             transition: transform 0.2s;
+            max-height: 85vh;
+            object-fit: contain;
+        }
+        
+        /* Specific sizing for portrait to keep it manageable */
+        .infographic-item.portrait-item img {
+            width: auto;
+            max-width: 100%;
         }
         
         .infographic-item img:hover {
@@ -3065,15 +3074,18 @@
             
             <!-- Main Overviews -->
             <div class="infographics-grid">
+                <!-- Landscape Full Width -->
                 <div class="infographic-item">
-                    <a href="img/landscape vibe code camp.png" target="_blank">
-                        <img src="img/landscape vibe code camp.png" alt="Landscape Overview of Vibe Code Camp">
+                    <a href="img/landscape-opt.jpg" target="_blank">
+                        <img src="img/landscape-opt.jpg" alt="Landscape Overview of Vibe Code Camp">
                     </a>
                     <div class="infographic-label">Landscape Overview</div>
                 </div>
-                <div class="infographic-item">
-                    <a href="img/portrait vibe code camp.png" target="_blank">
-                        <img src="img/portrait vibe code camp.png" alt="Portrait Overview of Vibe Code Camp">
+                
+                <!-- Portrait -->
+                <div class="infographic-item portrait-item">
+                    <a href="img/portrait-opt.jpg" target="_blank">
+                        <img src="img/portrait-opt.jpg" alt="Portrait Overview of Vibe Code Camp">
                     </a>
                     <div class="infographic-label">Portrait Overview</div>
                 </div>
@@ -3083,7 +3095,7 @@
 
             <!-- Slides Lightbox -->
             <div class="lightbox-viewer">
-                <div class="infographic-label" style="align-self: flex-start;">Session Slides (12 Pages)</div>
+                <div class="infographic-label" style="align-self: flex-start;">Session Slides (Auto-playing)</div>
                 <div class="lightbox-main">
                     <img id="lightbox-img" class="lightbox-image" src="img/page-01.jpg" alt="Slide 1">
                 </div>
@@ -3091,6 +3103,12 @@
                     <button id="lightbox-prev" class="lightbox-btn" aria-label="Previous slide">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <button id="lightbox-play-pause" class="lightbox-btn" aria-label="Pause slideshow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="6" y="4" width="4" height="16"></rect>
+                            <rect x="14" y="4" width="4" height="16"></rect>
                         </svg>
                     </button>
                     <div id="lightbox-counter" class="lightbox-counter">1 / 12</div>
@@ -3822,12 +3840,15 @@ function initReflections() {
 
 let currentLightboxIndex = 1;
 const totalLightboxSlides = 12;
+let lightboxInterval = null;
+let isPlaying = true;
 
 function openInfographicsModal() {
     const modal = document.getElementById('infographics-modal');
     if (!modal) return;
     modal.classList.add('visible');
     document.body.style.overflow = 'hidden';
+    startLightboxAutoPlay();
 }
 
 function closeInfographicsModal() {
@@ -3835,6 +3856,50 @@ function closeInfographicsModal() {
     if (!modal) return;
     modal.classList.remove('visible');
     document.body.style.overflow = '';
+    stopLightboxAutoPlay();
+}
+
+function startLightboxAutoPlay() {
+    if (lightboxInterval) clearInterval(lightboxInterval);
+    isPlaying = true;
+    updatePlayPauseButton();
+    lightboxInterval = setInterval(() => {
+        nextLightboxSlide(true); // true = automated
+    }, 3000);
+}
+
+function stopLightboxAutoPlay() {
+    if (lightboxInterval) clearInterval(lightboxInterval);
+    isPlaying = false;
+    updatePlayPauseButton();
+}
+
+function toggleLightboxPlayPause() {
+    if (isPlaying) {
+        stopLightboxAutoPlay();
+    } else {
+        startLightboxAutoPlay();
+    }
+}
+
+function updatePlayPauseButton() {
+    const btn = document.getElementById('lightbox-play-pause');
+    if (!btn) return;
+    
+    if (isPlaying) {
+        btn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>`;
+        btn.setAttribute('aria-label', 'Pause slideshow');
+    } else {
+        btn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>`;
+        btn.setAttribute('aria-label', 'Play slideshow');
+    }
 }
 
 function updateLightboxImage() {
@@ -3846,36 +3911,36 @@ function updateLightboxImage() {
     // Format index with leading zero if needed (e.g. page-01.jpg)
     const formattedIndex = currentLightboxIndex < 10 ? `0${currentLightboxIndex}` : currentLightboxIndex;
     
-    // Preload image to avoid flicker
-    const newSrc = `img/page-${formattedIndex}.jpg`;
-    
-    img.style.opacity = '0.5';
-    
-    const loader = new Image();
-    loader.onload = () => {
-        img.src = newSrc;
-        img.style.opacity = '1';
-    };
-    loader.src = newSrc;
+    // Direct switch without fade/opacity transition
+    img.src = `img/page-${formattedIndex}.jpg`;
     
     counter.textContent = `${currentLightboxIndex} / ${totalLightboxSlides}`;
     
-    prevBtn.disabled = currentLightboxIndex === 1;
-    nextBtn.disabled = currentLightboxIndex === totalLightboxSlides;
+    // Loop navigation enabled for auto-play, but buttons can be conditional
+    // We'll keep buttons always enabled for wrapping
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
 }
 
 function prevLightboxSlide() {
+    stopLightboxAutoPlay(); // Interaction stops auto-play
     if (currentLightboxIndex > 1) {
         currentLightboxIndex--;
-        updateLightboxImage();
+    } else {
+        currentLightboxIndex = totalLightboxSlides; // Wrap around
     }
+    updateLightboxImage();
 }
 
-function nextLightboxSlide() {
+function nextLightboxSlide(automated = false) {
+    if (!automated) stopLightboxAutoPlay(); // Manual interaction stops auto-play
+    
     if (currentLightboxIndex < totalLightboxSlides) {
         currentLightboxIndex++;
-        updateLightboxImage();
+    } else {
+        currentLightboxIndex = 1; // Wrap around
     }
+    updateLightboxImage();
 }
 
 function initInfographics() {
@@ -3884,6 +3949,7 @@ function initInfographics() {
     const closeBtn = document.querySelector('.infographics-close');
     const prevBtn = document.getElementById('lightbox-prev');
     const nextBtn = document.getElementById('lightbox-next');
+    const playPauseBtn = document.getElementById('lightbox-play-pause');
 
     if (card) {
         card.addEventListener('click', (e) => {
@@ -3905,10 +3971,12 @@ function initInfographics() {
     }
     
     if (prevBtn) prevBtn.addEventListener('click', prevLightboxSlide);
-    if (nextBtn) nextBtn.addEventListener('click', nextLightboxSlide);
+    if (nextBtn) nextBtn.addEventListener('click', () => nextLightboxSlide(false));
+    if (playPauseBtn) playPauseBtn.addEventListener('click', toggleLightboxPlayPause);
     
     // Initialize state
     updateLightboxImage();
+    updatePlayPauseButton();
 }
 
 // ============================================================================
