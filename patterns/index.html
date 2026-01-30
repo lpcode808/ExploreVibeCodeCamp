@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Library - Vibe Code Camp</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon-terminal.svg">
+    <link rel="stylesheet" href="../fonts.css">
+    <link rel="stylesheet" href="css-variables.css">
+    <link rel="stylesheet" href="components.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background:
+                radial-gradient(800px 400px at 20% 30%, rgba(224, 122, 95, 0.1), transparent),
+                radial-gradient(600px 400px at 80% 70%, rgba(92, 184, 178, 0.1), transparent),
+                var(--bg-primary);
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .pattern-card {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .pattern-card:hover {
+            border-color: var(--accent-coral);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+        }
+
+        .pattern-card h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pattern-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .pattern-card .icon {
+            font-size: 1.5rem;
+        }
+
+        .file-list {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .file-list h3 {
+            color: var(--accent-teal);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .file-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .file-list li {
+            margin-bottom: 0.75rem;
+        }
+
+        .file-list a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .file-list a:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent-coral);
+            text-decoration: none;
+        }
+
+        .file-list .file-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .file-list .file-icon.css { color: #42a5f5; }
+        .file-list .file-icon.js { color: #ffca28; }
+        .file-list .file-icon.html { color: #ef5350; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            color: var(--accent-coral);
+            text-decoration: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent-teal);
+        }
+
+        .callout {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Back to Guide
+        </a>
+
+        <header>
+            <h1>Pattern Library</h1>
+            <p class="subtitle">Reusable HTML, CSS & JavaScript patterns extracted from Vibe Code Camp</p>
+        </header>
+
+        <div class="card-grid">
+            <a href="README.html" class="pattern-card">
+                <h3><span class="icon">📖</span> Full Documentation</h3>
+                <p>Interactive guide with live examples, explanations for beginners, and copy-paste code snippets.</p>
+            </a>
+
+            <a href="README.html#cards" class="pattern-card">
+                <h3><span class="icon">🃏</span> Card Components</h3>
+                <p>Speaker cards, concept cards, and pathway cards with hover effects and content sections.</p>
+            </a>
+
+            <a href="README.html#modals" class="pattern-card">
+                <h3><span class="icon">💬</span> Modal Dialogs</h3>
+                <p>Overlay windows with backdrop blur, entrance animations, and keyboard navigation.</p>
+            </a>
+
+            <a href="README.html#navigation" class="pattern-card">
+                <h3><span class="icon">🧭</span> Navigation</h3>
+                <p>Table of contents sidebar, progress bars, and scroll tracking patterns.</p>
+            </a>
+
+            <a href="README.html#buttons" class="pattern-card">
+                <h3><span class="icon">🔘</span> Buttons & FABs</h3>
+                <p>Button styles, keyboard shortcut hints, and floating action buttons.</p>
+            </a>
+
+            <a href="README.html#javascript" class="pattern-card">
+                <h3><span class="icon">⚡</span> JavaScript Patterns</h3>
+                <p>Toggle classes, scroll tracking, search/filter, and keyboard navigation.</p>
+            </a>
+        </div>
+
+        <div class="file-list">
+            <h3>Raw Files (Copy & Paste)</h3>
+            <ul>
+                <li>
+                    <a href="css-variables.css" target="_blank">
+                        <span class="file-icon css">CSS</span>
+                        css-variables.css
+                    </a>
+                </li>
+                <li>
+                    <a href="components.css" target="_blank">
+                        <span class="file-icon css">CSS</span>
+                        components.css
+                    </a>
+                </li>
+                <li>
+                    <a href="interactions.js" target="_blank">
+                        <span class="file-icon js">JS</span>
+                        interactions.js
+                    </a>
+                </li>
+                <li>
+                    <a href="README.html" target="_blank">
+                        <span class="file-icon html">HTML</span>
+                        README.html (Full docs)
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="callout callout-teal">
+            <p><strong>How to use these patterns:</strong></p>
+            <ol style="margin-top: 0.5rem; padding-left: 1.5rem; color: var(--text-secondary);">
+                <li>Copy <code>css-variables.css</code> to define your design tokens</li>
+                <li>Copy the components you need from <code>components.css</code></li>
+                <li>Add JavaScript interactions from <code>interactions.js</code></li>
+                <li>Customize the colors and styles to match your brand</li>
+            </ol>
+        </div>
+
+        <footer>
+            <p>Part of the <a href="https://github.com/EveryInc/vibe-code-camp">Vibe Code Camp</a> project</p>
+            <p style="margin-top: 0.5rem;">Made with care for beginners learning web development</p>
+        </footer>
+    </div>
+</body>
+</html>

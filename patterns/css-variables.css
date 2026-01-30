@@ -1,0 +1,208 @@
+/*
+ * =====================================================
+ * CSS VARIABLES / DESIGN TOKENS
+ * =====================================================
+ *
+ * WHAT ARE CSS VARIABLES?
+ * -----------------------
+ * CSS Variables (also called Custom Properties) let you store
+ * values that you can reuse throughout your stylesheet.
+ *
+ * WHY USE THEM?
+ * -------------
+ * 1. Change one value, update everywhere
+ * 2. Makes theming easy (dark mode, light mode)
+ * 3. Keeps your colors/sizes consistent
+ * 4. Makes code more readable
+ *
+ * HOW TO USE:
+ * -----------
+ * Define:  --my-color: #ff0000;
+ * Use:     color: var(--my-color);
+ *
+ * COPY THIS ENTIRE FILE to use in your own projects!
+ */
+
+:root {
+    /* =========================================
+       BACKGROUND COLORS
+       =========================================
+       Use these for page backgrounds, cards,
+       and code blocks.
+    */
+    --bg-primary: #2b2b2b;      /* Main page background */
+    --bg-secondary: #343434;    /* Slightly lighter (for contrast) */
+    --bg-code: #1e1e1e;         /* Code blocks, cards */
+    --bg-code-header: #2a2a2a;  /* Code block header bars */
+    --bg-surface: #1f1f3a;      /* Alternative surface color */
+
+    /* =========================================
+       TEXT COLORS
+       =========================================
+       Three levels: primary, secondary, muted
+       Use muted for less important info like timestamps
+    */
+    --text-primary: #ececec;    /* Main text - high contrast */
+    --text-secondary: #b4b4b4;  /* Supporting text */
+    --text-muted: #8b8b8b;      /* Timestamps, hints, captions */
+
+    /* =========================================
+       ACCENT COLORS
+       =========================================
+       Use these for emphasis, buttons, links,
+       and interactive elements.
+    */
+    --accent-coral: #e07a5f;    /* Primary accent - warm orange-red */
+    --accent-teal: #5cb8b2;     /* Secondary accent - cool blue-green */
+    --accent-green: #81b88b;    /* Success, positive states */
+    --accent-purple: #b39ddb;   /* Special items, reflections */
+    --link: #8ab4f8;            /* Links - blue that works on dark bg */
+
+    /* =========================================
+       RPG/GAME WORLD COLORS (Alternative Palette)
+       =========================================
+       Used in the card explorer for categorizing
+       speakers by "world" or theme.
+    */
+    --world-vibe: #70d080;      /* Green - Vibe coding philosophy */
+    --world-agent: #ff6040;     /* Orange - AI agents topic */
+    --world-research: #40c0ff;  /* Cyan - Research & learning */
+    --world-builder: #d0a040;   /* Gold - Building & creating */
+    --world-consulting: #8080c0;/* Purple - Consulting & strategy */
+
+    /* =========================================
+       BORDERS & DIVIDERS
+       =========================================
+    */
+    --border: #404040;          /* Default border color */
+    --border-light: #505050;    /* Lighter borders for emphasis */
+    --border-focus: var(--accent-coral);  /* Focus state borders */
+
+    /* =========================================
+       SHADOWS
+       =========================================
+       Shadows add depth. Use sparingly!
+    */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-content: 0 28px 80px rgba(0, 0, 0, 0.45);
+
+    /* =========================================
+       TYPOGRAPHY
+       =========================================
+       Font stacks list fonts in order of preference.
+       If the first font isn't available, browser
+       tries the next one.
+    */
+
+    /* Body text - clean, modern sans-serif */
+    --font-body: 'Sora', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Headings - same as body for consistency */
+    --font-display: 'Sora', 'Segoe UI', -apple-system, sans-serif;
+
+    /* Code - monospace for readability */
+    --font-mono: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+
+    /* Long-form reading - serif for elegance */
+    --font-serif: 'Source Serif 4', 'Georgia', serif;
+
+    /* =========================================
+       SPACING SCALE
+       =========================================
+       Consistent spacing creates visual rhythm.
+       Based on 4px grid (0.25rem).
+    */
+    --spacing-xs: 0.25rem;      /* 4px */
+    --spacing-sm: 0.5rem;       /* 8px */
+    --spacing-md: 1rem;         /* 16px */
+    --spacing-lg: 1.5rem;       /* 24px */
+    --spacing-xl: 2rem;         /* 32px */
+    --spacing-2xl: 3rem;        /* 48px */
+
+    /* =========================================
+       BORDER RADIUS
+       =========================================
+       Consistent rounding for buttons, cards, etc.
+    */
+    --radius-sm: 4px;           /* Subtle rounding */
+    --radius-md: 8px;           /* Buttons, inputs */
+    --radius-lg: 12px;          /* Cards, callouts */
+    --radius-xl: 16px;          /* Large cards */
+    --radius-full: 999px;       /* Pills, circles */
+
+    /* =========================================
+       Z-INDEX SCALE
+       =========================================
+       Controls stacking order. Higher = on top.
+       Use these consistently to avoid conflicts.
+    */
+    --z-base: 1;                /* Default content */
+    --z-dropdown: 100;          /* Dropdowns, popovers */
+    --z-sticky: 200;            /* Sticky headers */
+    --z-fixed: 500;             /* Fixed elements */
+    --z-sidebar: 900;           /* Sidebars */
+    --z-modal: 2000;            /* Modals */
+    --z-tooltip: 3000;          /* Tooltips */
+    --z-max: 9999;              /* Progress bars, always on top */
+
+    /* =========================================
+       TRANSITIONS
+       =========================================
+       Smooth animations. Use these for consistency.
+    */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.2s ease;
+    --transition-slow: 0.3s ease;
+    --transition-bounce: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* =========================================
+       LAYOUT
+       =========================================
+       Common layout dimensions.
+    */
+    --toc-width: 320px;         /* Sidebar width */
+    --content-max-width: 900px; /* Max content width */
+    --header-height: 64px;      /* Fixed header height */
+}
+
+/*
+ * =====================================================
+ * DARK MODE (Default - already dark)
+ * =====================================================
+ * Since our default is dark, here's how you'd add
+ * light mode if needed:
+ */
+
+/*
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f5f5f5;
+        --bg-code: #f0f0f0;
+        --text-primary: #1a1a1a;
+        --text-secondary: #666666;
+        --text-muted: #999999;
+        --border: #e0e0e0;
+    }
+}
+*/
+
+/*
+ * =====================================================
+ * ALTERNATIVE: FORCE DARK MODE
+ * =====================================================
+ * Add this class to body for manual dark mode toggle:
+ */
+
+.dark-mode {
+    --bg-primary: #2b2b2b;
+    --bg-secondary: #343434;
+    --bg-code: #1e1e1e;
+    --text-primary: #ececec;
+    --text-secondary: #b4b4b4;
+    --text-muted: #8b8b8b;
+    --border: #404040;
+}

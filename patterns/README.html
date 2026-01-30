@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML/CSS Pattern Library - Vibe Code Camp</title>
+    <link rel="stylesheet" href="../fonts.css">
+    <style>
+        :root {
+            /* ===========================================
+               DESIGN TOKENS (CSS VARIABLES)
+               ===========================================
+               CSS Variables (Custom Properties) let you define
+               reusable values. They start with -- and are
+               accessed with var(--name).
+
+               Benefits:
+               - Change one value, update everywhere
+               - Consistent design across your site
+               - Easy theming (dark/light mode)
+            */
+
+            /* COLORS - Background Palette */
+            --bg-primary: #2b2b2b;      /* Main background - dark grey */
+            --bg-secondary: #343434;    /* Slightly lighter for contrast */
+            --bg-code: #1e1e1e;         /* Very dark for code blocks */
+            --bg-code-header: #2a2a2a;  /* Code block headers */
+
+            /* COLORS - Text Palette */
+            --text-primary: #ececec;    /* Main text - off-white */
+            --text-secondary: #b4b4b4;  /* Less important text */
+            --text-muted: #8b8b8b;      /* Hints, timestamps, etc */
+
+            /* COLORS - Accent Palette (for emphasis) */
+            --accent-coral: #e07a5f;    /* Orange-red - primary accent */
+            --accent-teal: #5cb8b2;     /* Blue-green - secondary accent */
+            --accent-green: #81b88b;    /* Soft green - success states */
+            --accent-purple: #b39ddb;   /* Light purple - special items */
+            --link: #8ab4f8;            /* Link color - light blue */
+
+            /* BORDERS & SHADOWS */
+            --border: #404040;          /* Default border color */
+            --content-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+
+            /* TYPOGRAPHY - Font Stacks */
+            /* Font stacks list fonts in order of preference
+               If first font isn't available, browser tries next */
+            --font-body: 'Sora', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Sora', 'Segoe UI', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Monaco', monospace;
+            --font-serif: 'Source Serif 4', serif;
+
+            /* SPACING - Consistent layout rhythm */
+            --toc-width: 320px;
+        }
+
+        /* ===========================================
+           CSS RESET
+           ===========================================
+           Browsers have default styles that differ.
+           A reset creates a consistent starting point.
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;  /* Include padding/border in width */
+        }
+
+        /* ===========================================
+           BASE BODY STYLES
+           ===========================================
+        */
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.75;        /* Space between lines - 1.75x font size */
+            font-size: 16px;          /* Base font size */
+            min-height: 100vh;        /* vh = viewport height */
+            padding: 2rem;
+        }
+
+        /* ===========================================
+           TYPOGRAPHY STYLES
+           ===========================================
+        */
+        h1 {
+            font-family: var(--font-display);
+            font-size: 2.4rem;        /* rem = relative to root font size */
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            letter-spacing: -0.02em; /* Slight letter tightening */
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: 1.55rem;
+            font-weight: 600;
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+            color: #fff;
+            position: relative;
+            padding-left: 0.9rem;    /* Space for decorative pill */
+        }
+
+        /* Decorative pill before h2 headings */
+        h2::before {
+            content: '';             /* Required for pseudo-elements */
+            position: absolute;
+            left: 0;
+            top: 0.45em;
+            width: 0.35rem;
+            height: 0.9rem;
+            border-radius: 999px;    /* Makes it pill-shaped */
+            background: linear-gradient(180deg, var(--accent-coral), var(--accent-teal));
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        p { margin-bottom: 1rem; }
+
+        a {
+            color: var(--link);
+            text-decoration: none;
+            transition: color 0.2s ease;  /* Smooth color change */
+        }
+
+        a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        /* Code styling */
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.875em;       /* em = relative to parent font size */
+            background: var(--bg-code);
+            padding: 0.2em 0.5em;
+            border-radius: 6px;
+            color: var(--accent-coral);
+            border: 1px solid var(--border);
+        }
+
+        pre {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        pre code {
+            background: transparent;
+            border: none;
+            padding: 0;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        /* Selection highlight */
+        ::selection {
+            background: rgba(224, 122, 95, 0.3);
+            color: #fff;
+        }
+
+        /* ===========================================
+           MAIN CONTENT CONTAINER
+           ===========================================
+        */
+        .main-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, rgba(52, 52, 52, 0.96), rgba(43, 43, 43, 0.94));
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--content-shadow);
+        }
+
+        /* ===========================================
+           SECTION DIVIDERS
+           ===========================================
+        */
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 2.5rem 0;
+        }
+
+        /* ===========================================
+           NAVIGATION (Table of Contents)
+           ===========================================
+        */
+        .toc {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-teal);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toc a:hover {
+            color: var(--accent-coral);
+            text-decoration: none;
+        }
+
+        .toc-number {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            min-width: 1.5rem;
+        }
+
+        /* ===========================================
+           PATTERN EXAMPLE BOXES
+           ===========================================
+        */
+        .pattern-example {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .pattern-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pattern-label::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <h1>HTML/CSS Pattern Library</h1>
+        <p>A beginner-friendly guide to the reusable patterns extracted from Vibe Code Camp. Each pattern is explained with comments and ready to copy-paste into your own projects.</p>
+
+        <nav class="toc">
+            <div class="toc-title">Quick Navigation</div>
+            <ul>
+                <li><a href="#css-variables"><span class="toc-number">01</span> CSS Variables (Design Tokens)</a></li>
+                <li><a href="#cards"><span class="toc-number">02</span> Card Components</a></li>
+                <li><a href="#tags"><span class="toc-number">03</span> Tag System</a></li>
+                <li><a href="#callouts"><span class="toc-number">04</span> Callout Boxes</a></li>
+                <li><a href="#modals"><span class="toc-number">05</span> Modal Dialogs</a></li>
+                <li><a href="#buttons"><span class="toc-number">06</span> Buttons & FABs</a></li>
+                <li><a href="#navigation"><span class="toc-number">07</span> Navigation Patterns</a></li>
+                <li><a href="#layouts"><span class="toc-number">08</span> Layout Systems</a></li>
+                <li><a href="#animations"><span class="toc-number">09</span> Animations & Transitions</a></li>
+                <li><a href="#javascript"><span class="toc-number">10</span> JavaScript Patterns</a></li>
+            </ul>
+        </nav>
+
+        <hr>
+
+        <h2 id="css-variables">CSS Variables (Design Tokens)</h2>
+        <p>CSS Variables (also called Custom Properties) are the foundation of a maintainable design system. They let you define values once and reuse them everywhere.</p>
+
+        <h3>What are CSS Variables?</h3>
+        <p>Think of CSS variables like containers that hold values. Instead of writing <code>#e07a5f</code> every time you want coral color, you write <code>var(--accent-coral)</code>. If you later decide to change the coral color, you only update it in one place!</p>
+
+        <div class="pattern-example">
+            <div class="pattern-label">Live Example - Color Palette</div>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div style="width: 100px; height: 80px; background: var(--accent-coral); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #fff;">--accent-coral</div>
+                <div style="width: 100px; height: 80px; background: var(--accent-teal); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #fff;">--accent-teal</div>
+                <div style="width: 100px; height: 80px; background: var(--accent-green); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #fff;">--accent-green</div>
+                <div style="width: 100px; height: 80px; background: var(--accent-purple); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #fff;">--accent-purple</div>
+                <div style="width: 100px; height: 80px; background: var(--link); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #1a1a2e;">--link</div>
+            </div>
+        </div>
+
+        <pre><code>/* Define variables in :root (applies to whole page) */
+:root {
+    /* Colors */
+    --bg-primary: #2b2b2b;
+    --accent-coral: #e07a5f;
+    --accent-teal: #5cb8b2;
+
+    /* Typography */
+    --font-body: 'Sora', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Spacing */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+}
+
+/* Use variables with var() */
+.my-element {
+    background: var(--bg-primary);
+    color: var(--accent-coral);
+    font-family: var(--font-body);
+    padding: var(--spacing-md);
+}</code></pre>
+
+        <hr>
+
+        <h2 id="cards">Card Components</h2>
+        <p>Cards are containers that group related information. They're one of the most common UI patterns in modern web design.</p>
+
+        <h3>Speaker Card Pattern</h3>
+        <p>Used for displaying person profiles with name, organization, timestamp, and key highlights.</p>
+
+        <div class="pattern-example">
+            <div class="pattern-label">Live Example - Speaker Card</div>
+            <div class="speaker-card">
+                <div class="speaker-header">
+                    <div>
+                        <h4 class="speaker-name">Jane Developer</h4>
+                        <div class="speaker-org">Acme Tech</div>
+                    </div>
+                    <span class="speaker-timestamp"><a href="#">0:15:30</a></span>
+                </div>
+                <p class="speaker-topic">"Building AI-powered applications with modern tooling"</p>
+                <ul class="speaker-highlights">
+                    <li>Start with the user problem, not the technology</li>
+                    <li>Iterate quickly and get feedback early</li>
+                    <li>Document your decisions for future reference</li>
+                </ul>
+                <div class="card-tags">
+                    <span class="tag tag-agents">Agents</span>
+                    <span class="tag tag-tools">Tools</span>
+                </div>
+            </div>
+        </div>
+
+        <pre><code>&lt;!-- SPEAKER CARD HTML STRUCTURE --&gt;
+&lt;div class="speaker-card"&gt;
+    &lt;div class="speaker-header"&gt;
+        &lt;div&gt;
+            &lt;h4 class="speaker-name"&gt;Speaker Name&lt;/h4&gt;
+            &lt;div class="speaker-org"&gt;Organization&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;span class="speaker-timestamp"&gt;
+            &lt;a href="#timestamp"&gt;0:15:30&lt;/a&gt;
+        &lt;/span&gt;
+    &lt;/div&gt;
+    &lt;p class="speaker-topic"&gt;"Topic or quote here"&lt;/p&gt;
+    &lt;ul class="speaker-highlights"&gt;
+        &lt;li&gt;Key point one&lt;/li&gt;
+        &lt;li&gt;Key point two&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class="card-tags"&gt;
+        &lt;span class="tag tag-agents"&gt;Agents&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+        <h3>Concept Card Pattern</h3>
+        <p>Used for explaining ideas with a TL;DR summary, detailed sections, and related links.</p>
+
+        <div class="pattern-example">
+            <div class="pattern-label">Live Example - Concept Card</div>
+            <div class="concept-card">
+                <div class="concept-header">
+                    <h4 class="concept-title">Vibe Coding</h4>
+                    <div class="card-tags">
+                        <span class="tag tag-philosophy">Philosophy</span>
+                    </div>
+                </div>
+                <p class="concept-tldr">Let the AI handle the boring stuff while you focus on the creative vision.</p>
+                <div class="concept-section">
+                    <div class="concept-label">What It Is</div>
+                    <div class="concept-text">
+                        <p>A development approach where you describe what you want in natural language, and AI tools generate the code. You guide the direction rather than writing every line.</p>
+                    </div>
+                </div>
+                <div class="concept-section">
+                    <div class="concept-label">When To Use</div>
+                    <div class="concept-text">
+                        <p>Prototyping, boilerplate code, learning new frameworks, or when you know what you want but not the exact syntax.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <pre><code>&lt;!-- CONCEPT CARD HTML STRUCTURE --&gt;
+&lt;div class="concept-card"&gt;
+    &lt;div class="concept-header"&gt;
+        &lt;h4 class="concept-title"&gt;Concept Name&lt;/h4&gt;
+        &lt;div class="card-tags"&gt;
+            &lt;span class="tag tag-philosophy"&gt;Category&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;p class="concept-tldr"&gt;Quick summary here.&lt;/p&gt;
+    &lt;div class="concept-section"&gt;
+        &lt;div class="concept-label"&gt;Section Title&lt;/div&gt;
+        &lt;div class="concept-text"&gt;
+            &lt;p&gt;Detailed explanation...&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+        <hr>
+
+        <h2 id="tags">Tag System</h2>
+        <p>Tags are small labels that categorize content. Using consistent colors helps users quickly identify categories.</p>
+
+        <div class="pattern-example">
+            <div class="pattern-label">Live Example - Tags</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <span class="tag tag-agents">Agents</span>
+                <span class="tag tag-workflow">Workflow</span>
+                <span class="tag tag-tools">Tools</span>
+                <span class="tag tag-philosophy">Philosophy</span>
+                <span class="tag tag-nontechnical">Non-Technical</span>
+            </div>
+        </div>
+
+        <pre><code>/* TAG CSS */
+.tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;       /* Makes it pill-shaped */
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Color variants - background is transparent color */
+.tag-agents {
+    background: rgba(224, 122, 95, 0.2);
+    color: var(--accent-coral);
+}
+
+.tag-workflow {
+    background: rgba(92, 184, 178, 0.2);
+    color: var(--accent-teal);
+}
+
+.tag-tools {
+    background: rgba(179, 157, 219, 0.2);
+    color: var(--accent-purple);
+}
+
+.tag-philosophy {
+    background: rgba(129, 184, 139, 0.2);
+    color: var(--accent-green);
+}
+
+.tag-nontechnical {
+    background: rgba(138, 180, 248, 0.2);
+    color: var(--link);
+}</code></pre>
+
+        <hr>
+
+        <h2 id="callouts">Callout Boxes</h2>
+        <p>Callouts highlight important information. The colored left border draws attention and indicates the type of content.</p>
+
+        <div class="pattern-example">
+            <div class="pattern-label">Live Example - Callouts</div>
+            <div class="callout">
+                <p><strong>Default (Coral):</strong> Use for warnings, important notes, or calls to action.</p>
+            </div>
+            <div class="callout callout-teal">
+                <p><strong>Teal:</strong> Use for tips, best practices, or helpful suggestions.</p>
+            </div>
+            <div class="callout callout-purple">
+                <p><strong>Purple:</strong> Use for references, quotes, or external links.</p>
+            </div>
+            <div class="callout callout-green">
+                <p><strong>Green:</strong> Use for success messages or positive outcomes.</p>
+            </div>
+        </div>
+
+        <pre><code>&lt;!-- CALLOUT HTML --&gt;
+&lt;div class="callout"&gt;
+    &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Your message here.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Add variant class for different colors --&gt;
+&lt;div class="callout callout-teal"&gt;...&lt;/div&gt;
+&lt;div class="callout callout-purple"&gt;...&lt;/div&gt;
+&lt;div class="callout callout-green"&gt;...&lt;/div&gt;
+
+/* CALLOUT CSS */
+.callout {
+    background: var(--bg-code);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-left: 4px solid var(--accent-coral);
+}
+
+.callout-teal { border-left-color: var(--accent-teal); }
+.callout-purple { border-left-color: var(--accent-purple); }
+.callout-green { border-left-color: var(--accent-green); }
+
+.callout p:last-child { margin-bottom: 0; }</code></pre>
+
+        <hr>
+
+        <h2 id="modals">Modal Dialogs</h2>
+        <p>Modals are overlay windows that appear on top of the main content. They're used for focused tasks like search, settings, or viewing details.</p>
+
+        <h3>Key Modal Concepts</h3>
+        <ul>
+            <li><strong>Backdrop:</strong> A semi-transparent overlay that dims the background</li>
+            <li><strong>Content:</strong> The actual modal window with your content</li>
+            <li><strong>Z-index:</strong> CSS property that controls stacking order (higher = on top)</li>
+            <li><strong>Visibility toggling:</strong> Using classes to show/hide the modal</li>
+        </ul>
+
+        <div class="pattern-example">
+            <div class="pattern-label">Modal Structure Diagram</div>
+            <pre style="background: var(--bg-code); padding: 1rem; border-radius: 8px; font-size: 0.8rem; color: var(--text-secondary);">
++------------------------------------------+
+|  VIEWPORT (your browser window)          |
+|  z-index: auto                           |
+|  +--------------------------------------+|
+|  |  PAGE CONTENT                        ||
+|  |  z-index: 1                          ||
+|  |  (your main page content)            ||
+|  +--------------------------------------+|
+|  +--------------------------------------+|
+|  |  MODAL CONTAINER (fixed position)    ||
+|  |  z-index: 2000                       ||
+|  |  +----------------------------------+||
+|  |  | BACKDROP (absolute, inset: 0)    |||
+|  |  | background: rgba(0,0,0,0.75)     |||
+|  |  | backdrop-filter: blur(8px)       |||
+|  |  +----------------------------------+||
+|  |  +----------------------------------+||
+|  |  | MODAL CONTENT (relative)         |||
+|  |  | z-index: higher than backdrop    |||
+|  |  | Your actual content here         |||
+|  |  +----------------------------------+||
+|  +--------------------------------------+|
++------------------------------------------+
+            </pre>
+        </div>
+
+        <pre><code>&lt;!-- MODAL HTML STRUCTURE --&gt;
+&lt;div id="my-modal" class="modal-hidden"&gt;
+    &lt;!-- Backdrop - click to close --&gt;
+    &lt;div class="modal-backdrop"&gt;&lt;/div&gt;
+
+    &lt;!-- Content - the actual modal --&gt;
+    &lt;div class="modal-content"&gt;
+        &lt;div class="modal-header"&gt;
+            &lt;h3 class="modal-title"&gt;Modal Title&lt;/h3&gt;
+            &lt;button class="modal-close" aria-label="Close"&gt;
+                &lt;!-- X icon --&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class="modal-body"&gt;
+            &lt;!-- Your content here --&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+/* MODAL CSS */
+#my-modal {
+    position: fixed;         /* Stays in place when scrolling */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;           /* Above everything else */
+    display: flex;
+    align-items: center;     /* Vertical centering */
+    justify-content: center; /* Horizontal centering */
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+/* Hidden state - toggled by JavaScript */
+#my-modal.modal-hidden {
+    display: none;
+    /* Or use opacity + pointer-events for animation */
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;                /* Shorthand for top/right/bottom/left: 0 */
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);  /* Blur the background */
+}
+
+.modal-content {
+    position: relative;      /* Creates stacking context */
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border);
+
+    /* Entrance animation */
+    transform: scale(0.95);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Animate content when modal becomes visible */
+#my-modal.visible .modal-content {
+    transform: scale(1);
+}</code></pre>
+
+        <hr>
+
+        <h2 id="buttons">Buttons & FABs</h2>
+        <p>Buttons trigger actions. FABs (Floating Action Buttons) are circular buttons that float above content.</p>
+
+        <div class="pattern-example">
+            <div class="pattern-label">Live Example - Button Variants</div>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                <button class="btn">Default Button</button>
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-secondary">Secondary Button</button>
+                <button class="shortcut-btn"><kbd>Cmd</kbd>+<kbd>K</kbd> Search</button>
+            </div>
+        </div>
+
+        <div class="pattern-example">
+            <div class="pattern-label">Live Example - Floating Action Buttons</div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button class="fab" title="Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <button class="fab fab-secondary" title="Up">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                </button>
+                <button class="fab fab-search" title="Search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <pre><code>/* BUTTON CSS */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    border-color: var(--accent-coral);
+    color: #fff;
+    transform: translateY(-2px);  /* Subtle lift effect */
+}
+
+.btn-primary {
+    background: var(--accent-coral);
+    border-color: var(--accent-coral);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #c96a52;  /* Slightly darker */
+}
+
+/* FLOATING ACTION BUTTON CSS */
+.fab {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;           /* Makes it circular */
+    background: var(--accent-coral);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s;
+}
+
+.fab:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+.fab-secondary {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+}
+
+.fab-search {
+    background: var(--accent-teal);
+}
+
+/* KEYBOARD SHORTCUT BUTTON */
+.shortcut-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.shortcut-btn kbd {
+    background: var(--bg-secondary);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-coral);
+}</code></pre>
+
+        <hr>
+
+        <h2 id="navigation">Navigation Patterns</h2>
+        <p>Navigation helps users find their way around your site. Here are patterns for sidebars and progress indicators.</p>
+
+        <h3>Table of Contents Sidebar</h3>
+        <p>A fixed sidebar that shows the document structure and highlights the current section as you scroll.</p>
+
+        <pre><code>&lt;!-- TOC SIDEBAR HTML --&gt;
+&lt;aside id="toc-panel"&gt;
+    &lt;div class="toc-header"&gt;
+        &lt;h2 class="toc-title"&gt;Contents&lt;/h2&gt;
+        &lt;p class="toc-subtitle"&gt;20 sections&lt;/p&gt;
+
+        &lt;!-- Filter search --&gt;
+        &lt;div class="toc-search"&gt;
+            &lt;svg&gt;...&lt;/svg&gt;
+            &lt;input type="text" placeholder="Filter sections..."&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;nav class="toc-nav"&gt;
+        &lt;div class="toc-section"&gt;
+            &lt;a href="#section1" data-id="section1"&gt;
+                &lt;span class="toc-time"&gt;0:00:00&lt;/span&gt;
+                Section Title
+            &lt;/a&gt;
+        &lt;/div&gt;
+        &lt;!-- More sections... --&gt;
+    &lt;/nav&gt;
+&lt;/aside&gt;
+
+/* TOC SIDEBAR CSS */
+#toc-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 320px;
+    height: 100vh;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    z-index: 900;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 6px 0 24px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s;
+}
+
+/* Hide sidebar when body has .toc-hidden */
+body.toc-hidden #toc-panel {
+    transform: translateX(-100%);
+}
+
+.toc-nav {
+    flex: 1;
+    overflow-y: auto;      /* Scrollable if content overflows */
+    padding: 16px 0;
+}
+
+/* Custom scrollbar */
+.toc-nav::-webkit-scrollbar {
+    width: 6px;
+}
+
+.toc-nav::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+.toc-section > a {
+    display: block;
+    padding: 10px 20px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.toc-section > a:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Active state - highlighted when scrolled to */
+.toc-section > a.active {
+    background: var(--accent-coral);
+    color: #fff;
+    border-left-color: var(--accent-coral);
+}</code></pre>
+
+        <h3>Reading Progress Bar</h3>
+        <p>A thin bar at the top that shows how far the user has scrolled through the document.</p>
+
+        <pre><code>&lt;!-- PROGRESS BAR HTML --&gt;
+&lt;div id="reading-progress"&gt;&lt;/div&gt;
+
+/* PROGRESS BAR CSS */
+#reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-coral), var(--accent-teal));
+    width: 0%;          /* Updated by JavaScript */
+    z-index: 9999;
+    transition: width 0.1s;
+}
+
+/* JAVASCRIPT TO UPDATE PROGRESS */
+window.addEventListener('scroll', () => {
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (window.scrollY / docHeight) * 100;
+    document.getElementById('reading-progress').style.width = scrolled + '%';
+});</code></pre>
+
+        <hr>
+
+        <h2 id="layouts">Layout Systems</h2>
+        <p>Modern CSS layouts use Flexbox and Grid. Here's when to use each:</p>
+
+        <ul>
+            <li><strong>Flexbox:</strong> One-dimensional layouts (row OR column). Great for navbars, card headers, centering.</li>
+            <li><strong>Grid:</strong> Two-dimensional layouts (rows AND columns). Great for page layouts, card grids, galleries.</li>
+        </ul>
+
+        <h3>Card Grid Layout</h3>
+        <pre><code>/* AUTO-FILLING GRID */
+.card-grid {
+    display: grid;
+    /* Auto-fill columns: minimum 320px, max 1fr (equal share) */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    align-items: start;  /* Cards align to top */
+}
+
+/* This creates a responsive grid that:
+   - Has as many columns as fit
+   - Each column is at least 320px
+   - Columns expand equally to fill space
+   - No media queries needed! */</code></pre>
+
+        <h3>Kanban Board Layout</h3>
+        <pre><code>/* KANBAN HORIZONTAL SCROLL */
+.kanban-container {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;           /* Horizontal scroll */
+    padding-bottom: 24px;       /* Space for scrollbar */
+}
+
+.kanban-column {
+    flex: 0 0 300px;            /* Don't grow, don't shrink, 300px width */
+    background: var(--bg-surface);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 120px);
+}
+
+.kanban-cards {
+    flex: 1;
+    overflow-y: auto;           /* Vertical scroll within column */
+    padding: 12px;
+}</code></pre>
+
+        <h3>Centered Content Container</h3>
+        <pre><code>/* MAIN CONTENT CENTERING */
+.main-content {
+    max-width: 900px;           /* Maximum width */
+    margin: 0 auto;             /* Center horizontally */
+    padding: 3rem;              /* Internal spacing */
+
+    /* With sidebar offset */
+    margin-left: var(--toc-width);
+}
+
+/* Remove offset when sidebar is hidden */
+body.toc-hidden .main-content {
+    margin-left: auto;
+}</code></pre>
+
+        <hr>
+
+        <h2 id="animations">Animations & Transitions</h2>
+        <p>Smooth animations make your UI feel polished. Here are the key patterns:</p>
+
+        <h3>Transition Basics</h3>
+        <pre><code>/* TRANSITION SYNTAX */
+.element {
+    /* transition: property duration timing-function; */
+    transition: all 0.2s ease;
+
+    /* Or be specific (better performance): */
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* TIMING FUNCTIONS */
+ease        /* Start slow, speed up, slow down at end (default) */
+linear      /* Constant speed */
+ease-in     /* Start slow */
+ease-out    /* End slow */
+ease-in-out /* Start and end slow */
+cubic-bezier(0.16, 1, 0.3, 1)  /* Custom curve (bouncy) */</code></pre>
+
+        <h3>Common Animation Patterns</h3>
+        <pre><code>/* HOVER LIFT EFFECT */
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* FADE IN/OUT */
+.modal {
+    opacity: 0;
+    pointer-events: none;      /* Can't click when hidden */
+    transition: opacity 0.2s ease;
+}
+
+.modal.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* SCALE ENTRANCE */
+.modal-content {
+    transform: scale(0.95);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal.visible .modal-content {
+    transform: scale(1);
+}
+
+/* SLIDE IN FROM LEFT */
+.sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+}
+
+.sidebar.visible {
+    transform: translateX(0);
+}</code></pre>
+
+        <hr>
+
+        <h2 id="javascript">JavaScript Patterns</h2>
+        <p>JavaScript brings interactivity to your patterns. Here are the essential functions:</p>
+
+        <h3>Toggle Classes (Show/Hide)</h3>
+        <pre><code>// Toggle sidebar visibility
+document.getElementById('toggle-btn').addEventListener('click', () => {
+    document.body.classList.toggle('toc-hidden');
+});
+
+// Open/close modal
+function openModal(modalId) {
+    document.getElementById(modalId).classList.add('visible');
+    document.getElementById(modalId).classList.remove('modal-hidden');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('visible');
+    // Or use modal-hidden for immediate hide
+    document.getElementById(modalId).classList.add('modal-hidden');
+}
+
+// Close modal when clicking backdrop
+document.querySelector('.modal-backdrop').addEventListener('click', () => {
+    closeModal('my-modal');
+});</code></pre>
+
+        <h3>Scroll Tracking (Active Section)</h3>
+        <pre><code>// Update active TOC item based on scroll position
+function updateActiveSection() {
+    const sections = document.querySelectorAll('h2[id], .concept-card[id]');
+    const tocLinks = document.querySelectorAll('.toc-section a');
+
+    let currentSection = '';
+
+    sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        // If section is near top of viewport
+        if (rect.top <= 100) {
+            currentSection = section.id;
+        }
+    });
+
+    // Update TOC highlighting
+    tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('data-id') === currentSection) {
+            link.classList.add('active');
+        }
+    });
+}
+
+// Listen for scroll events
+window.addEventListener('scroll', updateActiveSection);</code></pre>
+
+        <h3>Search/Filter</h3>
+        <pre><code>// Simple search filtering
+const searchInput = document.getElementById('search-input');
+const items = document.querySelectorAll('.searchable-item');
+
+searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        // Show/hide based on match
+        item.style.display = text.includes(query) ? 'block' : 'none';
+    });
+});
+
+// Highlight matching text
+function highlightMatch(text, query) {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '&lt;mark&gt;$1&lt;/mark&gt;');
+}</code></pre>
+
+        <h3>Keyboard Navigation</h3>
+        <pre><code>// Listen for keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    // Cmd/Ctrl + K for search
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();  // Prevent browser default
+        openModal('search-modal');
+    }
+
+    // Escape to close modals
+    if (e.key === 'Escape') {
+        closeModal('search-modal');
+    }
+
+    // T to toggle sidebar
+    if (e.key === 't' || e.key === 'T') {
+        // Don't trigger if typing in an input
+        if (e.target.tagName !== 'INPUT') {
+            document.body.classList.toggle('toc-hidden');
+        }
+    }
+});</code></pre>
+
+        <hr>
+
+        <div class="callout callout-teal">
+            <p><strong>Want to see these patterns in action?</strong> Check out the <a href="../index.html">main guide</a> and <a href="../cards.html">card explorer</a> to see how they're used in a real project.</p>
+        </div>
+
+        <div class="footer" style="text-align: center; padding: 2rem 0; color: var(--text-muted); font-size: 0.9rem;">
+            <p>Pattern Library extracted from <a href="https://github.com/EveryInc/vibe-code-camp">Vibe Code Camp</a></p>
+            <p style="margin-top: 0.5rem;">Built for beginners learning web development</p>
+        </div>
+    </div>
+
+    <style>
+        /* ========================================
+           CARD COMPONENT STYLES
+           (Copied from main patterns)
+           ======================================== */
+        .speaker-card {
+            background: var(--bg-code);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .speaker-card:hover {
+            border-color: var(--accent-coral);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .speaker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .speaker-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+        }
+
+        .speaker-org {
+            font-size: 0.875rem;
+            color: var(--accent-teal);
+        }
+
+        .speaker-timestamp {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.12);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 107, 107, 0.25);
+        }
+
+        .speaker-timestamp a {
+            color: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+
+        .speaker-timestamp a::before {
+            content: '▶';
+            font-size: 0.65rem;
+        }
+
+        .speaker-topic {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .speaker-highlights {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem 0;
+        }
+
+        .speaker-highlights li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .speaker-highlights li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-coral);
+        }
+
+        /* Concept Card */
+        .concept-card {
+            background: var(--bg-code);
+            border-radius: 16px;
+            padding: 1.75rem;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .concept-card:hover {
+            border-color: var(--accent-teal);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .concept-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .concept-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+        }
+
+        .concept-tldr {
+            font-size: 1rem;
+            color: var(--accent-teal);
+            font-style: italic;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--accent-teal);
+        }
+
+        .concept-section {
+            margin-bottom: 1.25rem;
+        }
+
+        .concept-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-coral);
+            margin-bottom: 0.5rem;
+        }
+
+        .concept-text {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .concept-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Tags */
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tag-agents { background: rgba(224, 122, 95, 0.2); color: var(--accent-coral); }
+        .tag-workflow { background: rgba(92, 184, 178, 0.2); color: var(--accent-teal); }
+        .tag-tools { background: rgba(179, 157, 219, 0.2); color: var(--accent-purple); }
+        .tag-philosophy { background: rgba(129, 184, 139, 0.2); color: var(--accent-green); }
+        .tag-nontechnical { background: rgba(138, 180, 248, 0.2); color: var(--link); }
+
+        /* Callouts */
+        .callout {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent-coral);
+        }
+
+        .callout-teal { border-left-color: var(--accent-teal); }
+        .callout-purple { border-left-color: var(--accent-purple); }
+        .callout-green { border-left-color: var(--accent-green); }
+        .callout p:last-child { margin-bottom: 0; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-coral);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: var(--accent-coral);
+            border-color: var(--accent-coral);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: var(--accent-teal);
+            border-color: var(--accent-teal);
+            color: #fff;
+        }
+
+        .shortcut-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.75rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .shortcut-btn:hover {
+            border-color: var(--accent-coral);
+            color: #fff;
+        }
+
+        .shortcut-btn kbd {
+            background: var(--bg-secondary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent-coral);
+        }
+
+        /* FAB */
+        .fab {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent-coral);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s;
+        }
+
+        .fab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .fab-secondary {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .fab-search {
+            background: var(--accent-teal);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</body>
+</html>
